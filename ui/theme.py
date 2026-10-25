@@ -120,23 +120,64 @@ def apply_custom_css():
             --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
         }
 
-        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], .main, .block-container {
             background-color: #0B1220 !important;
             color: #F8FAFC !important;
         }
 
-        .metric-card, .callout-box, .hero-container, div[data-testid="stExpander"] {
+        .hero-header {
             background-color: #111B2E !important;
             border-color: #1E293B !important;
             color: #F8FAFC !important;
         }
 
-        .metric-card .metric-val, .hero-title, h1, h2, h3, h4, p, span, label {
+        .hero-title {
             color: #F8FAFC !important;
         }
 
-        .metric-card .metric-sub, .hero-sub, .hero-summary {
+        .hero-subtitle {
             color: #94A3B8 !important;
+        }
+
+        .page-summary-banner {
+            background-color: rgba(14, 116, 144, 0.25) !important;
+            border-left-color: #38BDF8 !important;
+            color: #F8FAFC !important;
+        }
+
+        .analytics-card {
+            background-color: #111B2E !important;
+            border-color: #1E293B !important;
+            color: #F8FAFC !important;
+        }
+
+        .analytics-card-title {
+            color: #94A3B8 !important;
+        }
+
+        .analytics-card-value {
+            color: #F8FAFC !important;
+        }
+
+        .analytics-card-sub {
+            color: #94A3B8 !important;
+        }
+
+        .callout-box {
+            background-color: #111B2E !important;
+            border-color: #1E293B !important;
+            border-left-color: #38BDF8 !important;
+            color: #F8FAFC !important;
+        }
+
+        div[data-testid="stExpander"] {
+            background-color: #111B2E !important;
+            border-color: #1E293B !important;
+            color: #F8FAFC !important;
+        }
+
+        h1, h2, h3, h4, h5, h6, p, label, span {
+            color: #F8FAFC !important;
         }
 
         div[data-testid="stDataFrame"], table {
@@ -144,7 +185,7 @@ def apply_custom_css():
             color: #F8FAFC !important;
         }
 
-        section[data-testid="stSidebar"] {
+        section[data-testid="stSidebar"], [data-testid="stSidebarContent"] {
             background-color: #070D18 !important;
             border-right: 1px solid #1E293B !important;
         }
@@ -189,26 +230,71 @@ def apply_custom_css():
             --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03) !important;
         }
 
-        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"], .main, .block-container {
             background-color: #F4F7FB !important;
             color: #0F172A !important;
         }
 
-        .metric-card, .callout-box, .hero-container, div[data-testid="stExpander"] {
+        .hero-header {
             background-color: #FFFFFF !important;
             border-color: #E2E8F0 !important;
             color: #0F172A !important;
         }
 
-        .metric-card .metric-val, .hero-title, h1, h2, h3, h4 {
+        .hero-title {
             color: #0F172A !important;
         }
 
-        .metric-card .metric-sub, .hero-sub {
+        .hero-subtitle {
             color: #475569 !important;
         }
 
-        section[data-testid="stSidebar"] {
+        .page-summary-banner {
+            background-color: #ECFEFF !important;
+            border-left-color: #0E7490 !important;
+            color: #0F172A !important;
+        }
+
+        .analytics-card {
+            background-color: #FFFFFF !important;
+            border-color: #E2E8F0 !important;
+            color: #0F172A !important;
+        }
+
+        .analytics-card-title {
+            color: #475569 !important;
+        }
+
+        .analytics-card-value {
+            color: #0F172A !important;
+        }
+
+        .analytics-card-sub {
+            color: #475569 !important;
+        }
+
+        .callout-box {
+            background-color: #FFFFFF !important;
+            border-color: #E2E8F0 !important;
+            border-left-color: #0E7490 !important;
+            color: #0F172A !important;
+        }
+
+        div[data-testid="stExpander"] {
+            background-color: #FFFFFF !important;
+            border-color: #E2E8F0 !important;
+            color: #0F172A !important;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #0F172A !important;
+        }
+
+        p, label {
+            color: #475569 !important;
+        }
+
+        section[data-testid="stSidebar"], [data-testid="stSidebarContent"] {
             background-color: #0B1F3A !important;
         }
         """
