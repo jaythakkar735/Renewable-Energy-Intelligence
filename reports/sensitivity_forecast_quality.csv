@@ -1,0 +1,7 @@
+forecast_source,solar_forecast_rmse_mw,simulated_total_cost_eur,savings_vs_rule_based_eur,savings_vs_no_battery_eur,cycles
+Perfect Foresight,0.0,710390.16,23638.63,44069.29,309.57
+LightGBM Model,0.568,712738.52,21290.27,41720.93,310.8
+Ridge Model,0.53,712677.37,21351.42,41782.08,310.66
+Persistence Baseline,0.598,712063.0,21965.79,42396.45,310.2
+Degraded Forecast (+30% Noise),0.612,712775.44,21253.35,41684.01,310.71
+Degraded Forecast (+60% Noise),0.729,713009.63,21019.16,41449.82,309.21

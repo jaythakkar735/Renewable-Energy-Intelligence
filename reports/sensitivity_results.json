@@ -1,0 +1,195 @@
+{
+  "capacity": [
+    {
+      "capacity_mwh": 5.0,
+      "forecast_cost_eur": 728788.64,
+      "forecast_savings_no_battery_eur": 25670.81,
+      "forecast_savings_rule_based_eur": 12448.28,
+      "perfect_cost_eur": 726785.34,
+      "cycles": 357.29
+    },
+    {
+      "capacity_mwh": 10.0,
+      "forecast_cost_eur": 712738.52,
+      "forecast_savings_no_battery_eur": 41720.93,
+      "forecast_savings_rule_based_eur": 21290.27,
+      "perfect_cost_eur": 710237.44,
+      "cycles": 310.8
+    },
+    {
+      "capacity_mwh": 15.0,
+      "forecast_cost_eur": 704451.55,
+      "forecast_savings_no_battery_eur": 50007.9,
+      "forecast_savings_rule_based_eur": 28289.97,
+      "perfect_cost_eur": 701531.73,
+      "cycles": 257.6
+    },
+    {
+      "capacity_mwh": 20.0,
+      "forecast_cost_eur": 699115.91,
+      "forecast_savings_no_battery_eur": 55343.54,
+      "forecast_savings_rule_based_eur": 33380.88,
+      "perfect_cost_eur": 696027.65,
+      "cycles": 214.14
+    }
+  ],
+  "power": [
+    {
+      "power_mw": 1.0,
+      "forecast_cost_eur": 728817.21,
+      "savings_rule_based_eur": 15035.81,
+      "grid_import_mwh": 17004.32,
+      "cycles": 185.71
+    },
+    {
+      "power_mw": 1.5,
+      "forecast_cost_eur": 721425.81,
+      "savings_rule_based_eur": 18788.21,
+      "grid_import_mwh": 17107.96,
+      "cycles": 245.86
+    },
+    {
+      "power_mw": 2.5,
+      "forecast_cost_eur": 712738.52,
+      "savings_rule_based_eur": 21290.27,
+      "grid_import_mwh": 17259.09,
+      "cycles": 310.8
+    },
+    {
+      "power_mw": 3.5,
+      "forecast_cost_eur": 710513.44,
+      "savings_rule_based_eur": 19669.23,
+      "grid_import_mwh": 17358.8,
+      "cycles": 325.75
+    },
+    {
+      "power_mw": 5.0,
+      "forecast_cost_eur": 710459.57,
+      "savings_rule_based_eur": 17807.71,
+      "grid_import_mwh": 17387.19,
+      "cycles": 325.92
+    }
+  ],
+  "efficiency": [
+    {
+      "round_trip_efficiency": 0.76,
+      "forecast_cost_eur": 728896.61,
+      "savings_rule_based_eur": 16897.57,
+      "losses_mwh": 552.89,
+      "cycles": 202.73
+    },
+    {
+      "round_trip_efficiency": 0.82,
+      "forecast_cost_eur": 721388.65,
+      "savings_rule_based_eur": 18477.72,
+      "losses_mwh": 512.64,
+      "cycles": 259.17
+    },
+    {
+      "round_trip_efficiency": 0.88,
+      "forecast_cost_eur": 712738.52,
+      "savings_rule_based_eur": 21290.27,
+      "losses_mwh": 396.76,
+      "cycles": 310.8
+    },
+    {
+      "round_trip_efficiency": 0.94,
+      "forecast_cost_eur": 703454.07,
+      "savings_rule_based_eur": 24820.27,
+      "losses_mwh": 225.65,
+      "cycles": 364.79
+    }
+  ],
+  "adder": [
+    {
+      "retail_adder_eur_mwh": 0.0,
+      "no_battery_cost_eur": 417748.62,
+      "rule_based_cost_eur": 394978.19,
+      "forecast_cost_eur": 367027.92,
+      "forecast_savings_no_battery_eur": 50720.7,
+      "forecast_savings_rule_based_eur": 27950.27
+    },
+    {
+      "retail_adder_eur_mwh": 10.0,
+      "no_battery_cost_eur": 586104.04,
+      "rule_based_cost_eur": 564503.49,
+      "forecast_cost_eur": 540159.04,
+      "forecast_savings_no_battery_eur": 45945.0,
+      "forecast_savings_rule_based_eur": 24344.45
+    },
+    {
+      "retail_adder_eur_mwh": 20.0,
+      "no_battery_cost_eur": 754459.45,
+      "rule_based_cost_eur": 734028.79,
+      "forecast_cost_eur": 712738.52,
+      "forecast_savings_no_battery_eur": 41720.93,
+      "forecast_savings_rule_based_eur": 21290.27
+    },
+    {
+      "retail_adder_eur_mwh": 30.0,
+      "no_battery_cost_eur": 922814.87,
+      "rule_based_cost_eur": 903554.09,
+      "forecast_cost_eur": 884918.43,
+      "forecast_savings_no_battery_eur": 37896.44,
+      "forecast_savings_rule_based_eur": 18635.66
+    },
+    {
+      "retail_adder_eur_mwh": 40.0,
+      "no_battery_cost_eur": 1091170.29,
+      "rule_based_cost_eur": 1073079.39,
+      "forecast_cost_eur": 1056814.62,
+      "forecast_savings_no_battery_eur": 34355.67,
+      "forecast_savings_rule_based_eur": 16264.77
+    }
+  ],
+  "forecast_quality": [
+    {
+      "forecast_source": "Perfect Foresight",
+      "solar_forecast_rmse_mw": 0.0,
+      "simulated_total_cost_eur": 710390.16,
+      "savings_vs_rule_based_eur": 23638.63,
+      "savings_vs_no_battery_eur": 44069.29,
+      "cycles": 309.57
+    },
+    {
+      "forecast_source": "LightGBM Model",
+      "solar_forecast_rmse_mw": 0.568,
+      "simulated_total_cost_eur": 712738.52,
+      "savings_vs_rule_based_eur": 21290.27,
+      "savings_vs_no_battery_eur": 41720.93,
+      "cycles": 310.8
+    },
+    {
+      "forecast_source": "Ridge Model",
+      "solar_forecast_rmse_mw": 0.53,
+      "simulated_total_cost_eur": 712677.37,
+      "savings_vs_rule_based_eur": 21351.42,
+      "savings_vs_no_battery_eur": 41782.08,
+      "cycles": 310.66
+    },
+    {
+      "forecast_source": "Persistence Baseline",
+      "solar_forecast_rmse_mw": 0.598,
+      "simulated_total_cost_eur": 712063.0,
+      "savings_vs_rule_based_eur": 21965.79,
+      "savings_vs_no_battery_eur": 42396.45,
+      "cycles": 310.2
+    },
+    {
+      "forecast_source": "Degraded Forecast (+30% Noise)",
+      "solar_forecast_rmse_mw": 0.612,
+      "simulated_total_cost_eur": 712775.44,
+      "savings_vs_rule_based_eur": 21253.35,
+      "savings_vs_no_battery_eur": 41684.01,
+      "cycles": 310.71
+    },
+    {
+      "forecast_source": "Degraded Forecast (+60% Noise)",
+      "solar_forecast_rmse_mw": 0.729,
+      "simulated_total_cost_eur": 713009.63,
+      "savings_vs_rule_based_eur": 21019.16,
+      "savings_vs_no_battery_eur": 41449.82,
+      "cycles": 309.21
+    }
+  ]
+}

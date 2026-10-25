@@ -1,0 +1,85 @@
+{
+  "Persistence_24h": {
+    "count_all_hours": 6576,
+    "mae_all": 40.36,
+    "rmse_all": 86.85,
+    "nmae_all_pct": 5.55,
+    "nrmse_all_pct": 11.95,
+    "bias_all": -0.097,
+    "skill_score_vs_baseline": null,
+    "capacity_mw": 726.71,
+    "count_daylight_hours": 3663,
+    "mae_daylight": 71.176,
+    "rmse_daylight": 115.025,
+    "nmae_daylight_pct": 9.79,
+    "bias_daylight": -0.154
+  },
+  "Seasonal_Naive_168h": {
+    "count_all_hours": 6576,
+    "mae_all": 52.482,
+    "rmse_all": 104.562,
+    "nmae_all_pct": 7.22,
+    "nrmse_all_pct": 14.39,
+    "bias_all": -1.029,
+    "skill_score_vs_baseline": null,
+    "capacity_mw": 726.71,
+    "count_daylight_hours": 3663,
+    "mae_daylight": 92.815,
+    "rmse_daylight": 138.982,
+    "nmae_daylight_pct": 12.77,
+    "bias_daylight": -1.818
+  },
+  "Ridge": {
+    "count_all_hours": 6576,
+    "mae_all": 42.246,
+    "rmse_all": 77.034,
+    "nmae_all_pct": 5.81,
+    "nrmse_all_pct": 10.6,
+    "bias_all": -15.486,
+    "skill_score_vs_baseline": -0.0467,
+    "capacity_mw": 726.71,
+    "count_daylight_hours": 3663,
+    "mae_daylight": 72.873,
+    "rmse_daylight": 102.249,
+    "nmae_daylight_pct": 10.03,
+    "bias_daylight": -29.567
+  },
+  "Random_Forest": {
+    "count_all_hours": 6576,
+    "mae_all": 43.88,
+    "rmse_all": 82.502,
+    "nmae_all_pct": 6.04,
+    "nrmse_all_pct": 11.35,
+    "bias_all": -22.529,
+    "skill_score_vs_baseline": -0.0872,
+    "capacity_mw": 726.71,
+    "count_daylight_hours": 3663,
+    "mae_daylight": 77.841,
+    "rmse_daylight": 109.818,
+    "nmae_daylight_pct": 10.71,
+    "bias_daylight": -40.05
+  },
+  "LightGBM": {
+    "count_all_hours": 6576,
+    "mae_all": 44.171,
+    "rmse_all": 82.493,
+    "nmae_all_pct": 6.08,
+    "nrmse_all_pct": 11.35,
+    "bias_all": -21.078,
+    "skill_score_vs_baseline": -0.0944,
+    "capacity_mw": 726.71,
+    "count_daylight_hours": 3663,
+    "mae_daylight": 76.586,
+    "rmse_daylight": 109.794,
+    "nmae_daylight_pct": 10.54,
+    "bias_daylight": -39.329
+  },
+  "Conformal_90_Coverage": {
+    "empirical_coverage_pct": 70.35,
+    "mean_interval_width_mw": 83.658
+  },
+  "Conformal_80_Coverage": {
+    "empirical_coverage_pct": 60.07,
+    "mean_interval_width_mw": 46.814
+  }
+}

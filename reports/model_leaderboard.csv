@@ -1,0 +1,6 @@
+model,type,mae_all,rmse_all,nmae_all_pct,mae_daylight,skill_score,train_time_sec,inference_time_ms,size_kb
+Persistence (24h),Baseline,40.36,86.85,5.55,71.176,0.0,0.0,0.0,0.0
+Ridge Regression,Linear ML,42.246,77.034,5.81,72.873,-0.0467,0.009,0.34,0.7
+Random Forest,Ensemble ML,43.88,82.502,6.04,77.841,-0.0872,0.96,22.92,13569.1
+LightGBM,Gradient Boosting,44.171,82.493,6.08,76.586,-0.0944,0.181,6.45,231.7
+Seasonal Naive (168h),Baseline,52.482,104.562,7.22,92.815,-0.3003,0.0,0.0,0.0
