@@ -1,0 +1,25 @@
+{
+  "raw_total_rows": 50401,
+  "raw_start": "2014-12-31 23:00:00+00:00",
+  "raw_end": "2020-09-30 23:00:00+00:00",
+  "duplicate_timestamps": 0,
+  "missing_timestamps_on_grid": 0,
+  "raw_missing_per_column": {
+    "load_actual_mw": 3,
+    "load_forecast_mw": 3,
+    "price_day_ahead_eur_mwh": 15,
+    "solar_generation_mw": 12,
+    "wind_generation_mw": 3
+  },
+  "solar_negative_count": 0,
+  "remaining_nans_after_fill": {
+    "load_actual_mw": 0,
+    "load_forecast_mw": 0,
+    "price_day_ahead_eur_mwh": 0,
+    "solar_generation_mw": 1,
+    "wind_generation_mw": 0
+  },
+  "clean_total_rows": 50401,
+  "clean_start": "2014-12-31 23:00:00+00:00",
+  "clean_end": "2020-09-30 23:00:00+00:00"
+}

@@ -1,105 +1,264 @@
-/* Renewable Energy Intelligence Custom Styles */
+/* Renewable Energy Intelligence - High-Contrast Technical Theme */
+
+/* Light Theme Variables (Default) */
 :root {
-    --bg-primary: #0B1220;
-    --bg-secondary: #111B2E;
+    --bg-app: #F4F7FB;
+    --bg-surface: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-sidebar: #0B1F3A;
+    --border-color: #E2E8F0;
+    --border-card: #E2E8F0;
+    
+    /* Text Hierarchy - WCAG AA Compliant (>= 4.5:1 on #FFFFFF & #F4F7FB) */
+    --text-primary: #0F172A;
+    --text-muted: #475569;
+    --text-subtle: #64748B;
+    --text-sidebar: #F8FAFC;
+    --text-sidebar-muted: #94A3B8;
+
+    /* Semantic Strategy Colors */
+    --color-no-battery: #64748B;
+    --color-rule-based: #2563EB;
+    --color-lp-naive: #7C3AED;
+    --color-lp-ml: #059669;
+    --color-perfect-foresight: #10B981;
+
+    /* WCAG AA Accent Text Variants (>= 4.5:1) */
+    --accent-emerald-text: #047857;
+    --accent-cyan-text: #0E7490;
+    --accent-amber-text: #92400E;
+    --accent-red-text: #B91C1C;
+    --accent-blue-text: #1D4ED8;
+    --accent-violet-text: #6D28D9;
+
+    /* Subtle Pill Backgrounds */
+    --pill-emerald-bg: #ECFDF5;
+    --pill-cyan-bg: #ECFEFF;
+    --pill-amber-bg: #FFFBEB;
+    --pill-red-bg: #FEF2F2;
+    --pill-blue-bg: #EFF6FF;
+    --pill-violet-bg: #F5F3FF;
+
+    --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"], body.dark-mode {
+    --bg-app: #0B1220;
+    --bg-surface: #111B2E;
+    --bg-card: #111B2E;
+    --bg-sidebar: #070D18;
     --border-color: #1E293B;
-    --accent-emerald: #10B981;
-    --accent-cyan: #22D3EE;
-    --accent-blue: #3B82F6;
-    --accent-amber: #F59E0B;
-    --accent-red: #EF4444;
+    --border-card: #1E293B;
+
     --text-primary: #F8FAFC;
     --text-muted: #94A3B8;
+    --text-subtle: #64748B;
+    --text-sidebar: #F8FAFC;
+    --text-sidebar-muted: #94A3B8;
+
+    --color-no-battery: #94A3B8;
+    --color-rule-based: #3B82F6;
+    --color-lp-naive: #8B5CF6;
+    --color-lp-ml: #10B981;
+    --color-perfect-foresight: #34D399;
+
+    --accent-emerald-text: #34D399;
+    --accent-cyan-text: #38BDF8;
+    --accent-amber-text: #FBBF24;
+    --accent-red-text: #F87171;
+    --accent-blue-text: #60A5FA;
+    --accent-violet-text: #A78BFA;
+
+    --pill-emerald-bg: rgba(16, 185, 129, 0.15);
+    --pill-cyan-bg: rgba(34, 211, 238, 0.15);
+    --pill-amber-bg: rgba(245, 158, 11, 0.15);
+    --pill-red-bg: rgba(239, 68, 68, 0.15);
+    --pill-blue-bg: rgba(59, 130, 246, 0.15);
+    --pill-violet-bg: rgba(139, 92, 246, 0.15);
+
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
-/* Base typography */
-html, body, [class*="css"] {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text-primary);
+/* Base App Styling */
+.stApp {
+    background-color: var(--bg-app) !important;
+    color: var(--text-primary) !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Tabular figures for numbers */
-.metric-value, .stMetric, table td {
+/* Sidebar Styling: Professional Dark Navy */
+section[data-testid="stSidebar"] {
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+section[data-testid="stSidebar"] * {
+    color: var(--text-sidebar) !important;
+}
+
+section[data-testid="stSidebar"] .stSelectbox label,
+section[data-testid="stSidebar"] .stSlider label {
+    color: var(--text-sidebar-muted) !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Hide Streamlit Hamburger Menu, Footer, and Deploy Button */
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header[data-testid="stHeader"] {
+    background: transparent !important;
+}
+
+/* Typography & Numerics */
+.metric-value, .stMetric, table td, .tabular-nums {
     font-variant-numeric: tabular-nums;
 }
 
-/* Hide default streamlit header/footer decorations */
-header[data-testid="stHeader"] {
-    background-color: transparent !important;
-}
-
-/* Card container */
+/* Analytics Card */
 .analytics-card {
-    background: #111B2E;
-    border: 1px solid #1E293B;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
     border-radius: 8px;
-    padding: 18px 22px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
 .analytics-card-title {
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     color: var(--text-muted);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .analytics-card-value {
-    font-size: 1.85rem;
+    font-size: 1.75rem;
     font-weight: 700;
     color: var(--text-primary);
     line-height: 1.2;
 }
 
 .analytics-card-sub {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
-    margin-top: 6px;
+    margin-top: 5px;
 }
 
-/* Pills & Badges */
+/* Status Pills */
 .status-pill {
-    display: inline-block;
-    padding: 3px 10px;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 9px;
     border-radius: 9999px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.03em;
 }
 
 .status-pill-emerald {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10B981;
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    background-color: var(--pill-emerald-bg);
+    color: var(--accent-emerald-text);
+    border: 1px solid var(--accent-emerald-text);
 }
 
 .status-pill-cyan {
-    background: rgba(34, 211, 238, 0.15);
-    color: #22D3EE;
-    border: 1px solid rgba(34, 211, 238, 0.3);
+    background-color: var(--pill-cyan-bg);
+    color: var(--accent-cyan-text);
+    border: 1px solid var(--accent-cyan-text);
 }
 
 .status-pill-amber {
-    background: rgba(245, 158, 11, 0.15);
-    color: #F59E0B;
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    background-color: var(--pill-amber-bg);
+    color: var(--accent-amber-text);
+    border: 1px solid var(--accent-amber-text);
+}
+
+.status-pill-blue {
+    background-color: var(--pill-blue-bg);
+    color: var(--accent-blue-text);
+    border: 1px solid var(--accent-blue-text);
+}
+
+.status-pill-violet {
+    background-color: var(--pill-violet-bg);
+    color: var(--accent-violet-text);
+    border: 1px solid var(--accent-violet-text);
+}
+
+/* Hero Header Banner */
+.hero-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+}
+
+.hero-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.hero-subtitle {
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.page-summary-banner {
+    background: var(--pill-cyan-bg);
+    border-left: 3px solid var(--accent-cyan-text);
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 0.88rem;
+    color: var(--text-primary);
+    margin: 12px 0 16px 0;
 }
 
 /* Explanatory callouts */
 .callout-box {
-    background: rgba(17, 27, 46, 0.8);
-    border-left: 4px solid var(--accent-cyan);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-left: 4px solid var(--accent-cyan-text);
     padding: 12px 16px;
-    border-radius: 4px;
+    border-radius: 6px;
     margin: 12px 0;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--text-primary);
 }
 
 .callout-box-amber {
-    border-left-color: var(--accent-amber);
-    background: rgba(245, 158, 11, 0.08);
+    border-left-color: var(--accent-amber-text);
+    background-color: var(--pill-amber-bg);
+}
+
+.callout-box-emerald {
+    border-left-color: var(--accent-emerald-text);
+    background-color: var(--pill-emerald-bg);
+}
+
+/* Provenance Footer */
+.provenance-footer {
+    border-top: 1px solid var(--border-card);
+    padding-top: 14px;
+    margin-top: 36px;
+    font-size: 0.76rem;
+    color: var(--text-subtle);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
 }

@@ -1,0 +1,14 @@
+{
+  "cost_no_battery_eur": 754459.45,
+  "cost_rule_based_eur": 734028.79,
+  "cost_lp_naive_eur": 712084.81,
+  "cost_lp_ml_eur": 712527.47,
+  "cost_perfect_foresight_eur": 710239.43,
+  "rule_based_savings_eur": 20430.66,
+  "smarter_scheduling_value_eur": 21943.98,
+  "ml_forecast_value_eur": -442.66,
+  "perfect_foresight_gap_eur": 2288.04,
+  "total_realized_savings_eur": 41931.98,
+  "total_possible_savings_eur": 44220.02,
+  "realized_share_of_possible_pct": 94.83
+}

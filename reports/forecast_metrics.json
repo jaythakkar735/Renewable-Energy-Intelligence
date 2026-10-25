@@ -1,85 +1,152 @@
 {
-  "Persistence_24h": {
-    "count_all_hours": 6576,
-    "mae_all": 40.36,
-    "rmse_all": 86.85,
-    "nmae_all_pct": 5.55,
-    "nrmse_all_pct": 11.95,
-    "bias_all": -0.097,
+  "Last_Available_Day": {
+    "count_all_hours": 6547,
+    "mae_all": 41.587,
+    "rmse_all": 88.547,
+    "nmae_all_pct": 5.72,
+    "nrmse_all_pct": 12.18,
+    "bias_all": -0.454,
     "skill_score_vs_baseline": null,
     "capacity_mw": 726.71,
-    "count_daylight_hours": 3663,
-    "mae_daylight": 71.176,
-    "rmse_daylight": 115.025,
-    "nmae_daylight_pct": 9.79,
-    "bias_daylight": -0.154
+    "count_daylight_hours": 3642,
+    "mae_daylight": 74.444,
+    "rmse_daylight": 118.708,
+    "nmae_daylight_pct": 10.24,
+    "bias_daylight": -0.501
+  },
+  "Seasonal_Naive_48h": {
+    "count_all_hours": 6547,
+    "mae_all": 45.203,
+    "rmse_all": 94.722,
+    "nmae_all_pct": 6.22,
+    "nrmse_all_pct": 13.03,
+    "bias_all": -0.665,
+    "skill_score_vs_baseline": null,
+    "capacity_mw": 726.71,
+    "count_daylight_hours": 3642,
+    "mae_daylight": 80.943,
+    "rmse_daylight": 126.988,
+    "nmae_daylight_pct": 11.14,
+    "bias_daylight": -0.88
   },
   "Seasonal_Naive_168h": {
-    "count_all_hours": 6576,
-    "mae_all": 52.482,
-    "rmse_all": 104.562,
-    "nmae_all_pct": 7.22,
-    "nrmse_all_pct": 14.39,
-    "bias_all": -1.029,
+    "count_all_hours": 6547,
+    "mae_all": 51.547,
+    "rmse_all": 103.379,
+    "nmae_all_pct": 7.09,
+    "nrmse_all_pct": 14.23,
+    "bias_all": -1.27,
     "skill_score_vs_baseline": null,
     "capacity_mw": 726.71,
-    "count_daylight_hours": 3663,
-    "mae_daylight": 92.815,
-    "rmse_daylight": 138.982,
-    "nmae_daylight_pct": 12.77,
-    "bias_daylight": -1.818
+    "count_daylight_hours": 3642,
+    "mae_daylight": 92.348,
+    "rmse_daylight": 138.596,
+    "nmae_daylight_pct": 12.71,
+    "bias_daylight": -1.969
   },
   "Ridge": {
-    "count_all_hours": 6576,
-    "mae_all": 42.246,
-    "rmse_all": 77.034,
-    "nmae_all_pct": 5.81,
-    "nrmse_all_pct": 10.6,
-    "bias_all": -15.486,
-    "skill_score_vs_baseline": -0.0467,
+    "count_all_hours": 6547,
+    "mae_all": 39.925,
+    "rmse_all": 74.362,
+    "nmae_all_pct": 5.49,
+    "nrmse_all_pct": 10.23,
+    "bias_all": -12.624,
+    "skill_score_vs_baseline": 0.04,
     "capacity_mw": 726.71,
-    "count_daylight_hours": 3663,
-    "mae_daylight": 72.873,
-    "rmse_daylight": 102.249,
-    "nmae_daylight_pct": 10.03,
-    "bias_daylight": -29.567
+    "count_daylight_hours": 3642,
+    "mae_daylight": 71.456,
+    "rmse_daylight": 99.688,
+    "nmae_daylight_pct": 9.83,
+    "bias_daylight": -22.378
   },
   "Random_Forest": {
-    "count_all_hours": 6576,
-    "mae_all": 43.88,
-    "rmse_all": 82.502,
-    "nmae_all_pct": 6.04,
-    "nrmse_all_pct": 11.35,
-    "bias_all": -22.529,
-    "skill_score_vs_baseline": -0.0872,
+    "count_all_hours": 6547,
+    "mae_all": 39.578,
+    "rmse_all": 74.413,
+    "nmae_all_pct": 5.45,
+    "nrmse_all_pct": 10.24,
+    "bias_all": -8.061,
+    "skill_score_vs_baseline": 0.0483,
     "capacity_mw": 726.71,
-    "count_daylight_hours": 3663,
-    "mae_daylight": 77.841,
-    "rmse_daylight": 109.818,
-    "nmae_daylight_pct": 10.71,
-    "bias_daylight": -40.05
+    "count_daylight_hours": 3642,
+    "mae_daylight": 70.832,
+    "rmse_daylight": 99.756,
+    "nmae_daylight_pct": 9.75,
+    "bias_daylight": -14.175
   },
   "LightGBM": {
-    "count_all_hours": 6576,
-    "mae_all": 44.171,
-    "rmse_all": 82.493,
-    "nmae_all_pct": 6.08,
-    "nrmse_all_pct": 11.35,
-    "bias_all": -21.078,
-    "skill_score_vs_baseline": -0.0944,
+    "count_all_hours": 6547,
+    "mae_all": 39.71,
+    "rmse_all": 74.388,
+    "nmae_all_pct": 5.46,
+    "nrmse_all_pct": 10.24,
+    "bias_all": -11.433,
+    "skill_score_vs_baseline": 0.0451,
     "capacity_mw": 726.71,
-    "count_daylight_hours": 3663,
-    "mae_daylight": 76.586,
-    "rmse_daylight": 109.794,
-    "nmae_daylight_pct": 10.54,
-    "bias_daylight": -39.329
+    "count_daylight_hours": 3642,
+    "mae_daylight": 71.07,
+    "rmse_daylight": 99.723,
+    "nmae_daylight_pct": 9.78,
+    "bias_daylight": -20.238
   },
   "Conformal_90_Coverage": {
-    "empirical_coverage_pct": 70.35,
-    "mean_interval_width_mw": 83.658
+    "overall_coverage_pct": 73.91,
+    "overall_mean_width_mw": 102.28,
+    "daylight_coverage_pct": 70.95,
+    "daylight_mean_width_mw": 183.86,
+    "night_coverage_pct": 77.62,
+    "night_mean_width_mw": 0.0,
+    "seasonal": {
+      "Winter": {
+        "coverage_pct": 88.26,
+        "mean_width_mw": 45.71,
+        "count_hours": 1440
+      },
+      "Spring": {
+        "coverage_pct": 67.53,
+        "mean_width_mw": 101.32,
+        "count_hours": 2208
+      },
+      "Summer": {
+        "coverage_pct": 69.76,
+        "mean_width_mw": 139.02,
+        "count_hours": 2179
+      },
+      "Autumn": {
+        "coverage_pct": 77.36,
+        "mean_width_mw": 107.15,
+        "count_hours": 720
+      }
+    }
   },
   "Conformal_80_Coverage": {
-    "empirical_coverage_pct": 60.07,
-    "mean_interval_width_mw": 46.814
+    "overall_coverage_pct": 69.45,
+    "overall_mean_width_mw": 79.66,
+    "daylight_coverage_pct": 62.93,
+    "daylight_mean_width_mw": 143.21,
+    "night_coverage_pct": 77.62,
+    "night_mean_width_mw": 0.0,
+    "seasonal": {
+      "Winter": {
+        "coverage_pct": 87.08,
+        "mean_width_mw": 40.81,
+        "count_hours": 1440
+      },
+      "Spring": {
+        "coverage_pct": 63.18,
+        "mean_width_mw": 79.53,
+        "count_hours": 2208
+      },
+      "Summer": {
+        "coverage_pct": 63.19,
+        "mean_width_mw": 105.03,
+        "count_hours": 2179
+      },
+      "Autumn": {
+        "coverage_pct": 72.36,
+        "mean_width_mw": 81.01,
+        "count_hours": 720
+      }
+    }
   }
 }

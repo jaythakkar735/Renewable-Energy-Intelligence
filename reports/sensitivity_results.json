@@ -2,102 +2,115 @@
   "capacity": [
     {
       "capacity_mwh": 5.0,
-      "forecast_cost_eur": 728788.64,
-      "forecast_savings_no_battery_eur": 25670.81,
-      "forecast_savings_rule_based_eur": 12448.28,
-      "perfect_cost_eur": 726785.34,
-      "cycles": 357.29
+      "cost_lp_ml_eur": 728499.19,
+      "cost_lp_naive_eur": 728124.23,
+      "cost_perfect_eur": 726788.18,
+      "savings_vs_no_battery_eur": 25960.26,
+      "savings_vs_rule_based_eur": 12737.73,
+      "ml_forecast_value_eur": -374.96,
+      "cycles": 354.96
     },
     {
       "capacity_mwh": 10.0,
-      "forecast_cost_eur": 712738.52,
-      "forecast_savings_no_battery_eur": 41720.93,
-      "forecast_savings_rule_based_eur": 21290.27,
-      "perfect_cost_eur": 710237.44,
-      "cycles": 310.8
+      "cost_lp_ml_eur": 712527.47,
+      "cost_lp_naive_eur": 712084.81,
+      "cost_perfect_eur": 710239.43,
+      "savings_vs_no_battery_eur": 41931.98,
+      "savings_vs_rule_based_eur": 21501.32,
+      "ml_forecast_value_eur": -442.66,
+      "cycles": 310.38
     },
     {
       "capacity_mwh": 15.0,
-      "forecast_cost_eur": 704451.55,
-      "forecast_savings_no_battery_eur": 50007.9,
-      "forecast_savings_rule_based_eur": 28289.97,
-      "perfect_cost_eur": 701531.73,
-      "cycles": 257.6
+      "cost_lp_ml_eur": 704116.51,
+      "cost_lp_naive_eur": 703675.16,
+      "cost_perfect_eur": 701534.44,
+      "savings_vs_no_battery_eur": 50342.94,
+      "savings_vs_rule_based_eur": 28625.01,
+      "ml_forecast_value_eur": -441.35,
+      "cycles": 257.21
     },
     {
       "capacity_mwh": 20.0,
-      "forecast_cost_eur": 699115.91,
-      "forecast_savings_no_battery_eur": 55343.54,
-      "forecast_savings_rule_based_eur": 33380.88,
-      "perfect_cost_eur": 696027.65,
-      "cycles": 214.14
+      "cost_lp_ml_eur": 698915.6,
+      "cost_lp_naive_eur": 698258.59,
+      "cost_perfect_eur": 696028.12,
+      "savings_vs_no_battery_eur": 55543.85,
+      "savings_vs_rule_based_eur": 33581.19,
+      "ml_forecast_value_eur": -657.01,
+      "cycles": 213.77
     }
   ],
   "power": [
     {
       "power_mw": 1.0,
-      "forecast_cost_eur": 728817.21,
-      "savings_rule_based_eur": 15035.81,
-      "grid_import_mwh": 17004.32,
-      "cycles": 185.71
+      "cost_lp_ml_eur": 728742.84,
+      "savings_vs_rule_based_eur": 15110.18,
+      "ml_forecast_value_eur": -129.23,
+      "grid_import_mwh": 16997.81,
+      "cycles": 185.66
     },
     {
       "power_mw": 1.5,
-      "forecast_cost_eur": 721425.81,
-      "savings_rule_based_eur": 18788.21,
-      "grid_import_mwh": 17107.96,
-      "cycles": 245.86
+      "cost_lp_ml_eur": 721282.95,
+      "savings_vs_rule_based_eur": 18931.07,
+      "ml_forecast_value_eur": -238.7,
+      "grid_import_mwh": 17097.35,
+      "cycles": 246.03
     },
     {
       "power_mw": 2.5,
-      "forecast_cost_eur": 712738.52,
-      "savings_rule_based_eur": 21290.27,
-      "grid_import_mwh": 17259.09,
-      "cycles": 310.8
+      "cost_lp_ml_eur": 712527.47,
+      "savings_vs_rule_based_eur": 21501.32,
+      "ml_forecast_value_eur": -442.66,
+      "grid_import_mwh": 17242.28,
+      "cycles": 310.38
     },
     {
       "power_mw": 3.5,
-      "forecast_cost_eur": 710513.44,
-      "savings_rule_based_eur": 19669.23,
-      "grid_import_mwh": 17358.8,
-      "cycles": 325.75
+      "cost_lp_ml_eur": 709957.35,
+      "savings_vs_rule_based_eur": 20225.32,
+      "ml_forecast_value_eur": -393.55,
+      "grid_import_mwh": 17304.38,
+      "cycles": 323.69
     },
     {
       "power_mw": 5.0,
-      "forecast_cost_eur": 710459.57,
-      "savings_rule_based_eur": 17807.71,
-      "grid_import_mwh": 17387.19,
-      "cycles": 325.92
+      "cost_lp_ml_eur": 709886.21,
+      "savings_vs_rule_based_eur": 18381.07,
+      "ml_forecast_value_eur": -486.44,
+      "grid_import_mwh": 17328.99,
+      "cycles": 324.24
     }
   ],
   "efficiency": [
     {
       "round_trip_efficiency": 0.76,
-      "forecast_cost_eur": 728896.61,
-      "savings_rule_based_eur": 16897.57,
-      "losses_mwh": 552.89,
-      "cycles": 202.73
+      "cost_lp_ml_eur": 728690.9,
+      "savings_vs_rule_based_eur": 17103.28,
+      "losses_mwh": 552.42,
+      "cycles": 202.56
     },
     {
       "round_trip_efficiency": 0.82,
-      "forecast_cost_eur": 721388.65,
-      "savings_rule_based_eur": 18477.72,
-      "losses_mwh": 512.64,
-      "cycles": 259.17
+      "cost_lp_ml_eur": 721157.89,
+      "savings_vs_rule_based_eur": 18708.48,
+      "losses_mwh": 511.91,
+      "cycles": 258.8
     },
     {
       "round_trip_efficiency": 0.88,
-      "forecast_cost_eur": 712738.52,
-      "savings_rule_based_eur": 21290.27,
-      "losses_mwh": 396.76,
-      "cycles": 310.8
+      "cost_lp_ml_eur": 712527.47,
+      "savings_vs_rule_based_eur": 21501.32,
+      "losses_mwh": 396.23,
+      "cycles": 310.38
     },
     {
       "round_trip_efficiency": 0.94,
-      "forecast_cost_eur": 703454.07,
-      "savings_rule_based_eur": 24820.27,
-      "losses_mwh": 225.65,
-      "cycles": 364.79
+      "cost_lp_ml_eur": 703195.6,
+      "savings_vs_rule_based_eur": 25078.74,
+      "losses_mwh": 224.86,
+      "cycles": 363.51
     }
   ],
   "adder": [
@@ -105,91 +118,272 @@
       "retail_adder_eur_mwh": 0.0,
       "no_battery_cost_eur": 417748.62,
       "rule_based_cost_eur": 394978.19,
-      "forecast_cost_eur": 367027.92,
-      "forecast_savings_no_battery_eur": 50720.7,
-      "forecast_savings_rule_based_eur": 27950.27
+      "lp_ml_cost_eur": 366695.12,
+      "savings_vs_no_battery_eur": 51053.5,
+      "savings_vs_rule_based_eur": 28283.07
     },
     {
       "retail_adder_eur_mwh": 10.0,
       "no_battery_cost_eur": 586104.04,
       "rule_based_cost_eur": 564503.49,
-      "forecast_cost_eur": 540159.04,
-      "forecast_savings_no_battery_eur": 45945.0,
-      "forecast_savings_rule_based_eur": 24344.45
+      "lp_ml_cost_eur": 540074.1,
+      "savings_vs_no_battery_eur": 46029.94,
+      "savings_vs_rule_based_eur": 24429.39
     },
     {
       "retail_adder_eur_mwh": 20.0,
       "no_battery_cost_eur": 754459.45,
       "rule_based_cost_eur": 734028.79,
-      "forecast_cost_eur": 712738.52,
-      "forecast_savings_no_battery_eur": 41720.93,
-      "forecast_savings_rule_based_eur": 21290.27
+      "lp_ml_cost_eur": 712527.47,
+      "savings_vs_no_battery_eur": 41931.98,
+      "savings_vs_rule_based_eur": 21501.32
     },
     {
       "retail_adder_eur_mwh": 30.0,
       "no_battery_cost_eur": 922814.87,
       "rule_based_cost_eur": 903554.09,
-      "forecast_cost_eur": 884918.43,
-      "forecast_savings_no_battery_eur": 37896.44,
-      "forecast_savings_rule_based_eur": 18635.66
+      "lp_ml_cost_eur": 884485.31,
+      "savings_vs_no_battery_eur": 38329.56,
+      "savings_vs_rule_based_eur": 19068.78
     },
     {
       "retail_adder_eur_mwh": 40.0,
       "no_battery_cost_eur": 1091170.29,
       "rule_based_cost_eur": 1073079.39,
-      "forecast_cost_eur": 1056814.62,
-      "forecast_savings_no_battery_eur": 34355.67,
-      "forecast_savings_rule_based_eur": 16264.77
+      "lp_ml_cost_eur": 1056340.85,
+      "savings_vs_no_battery_eur": 34829.44,
+      "savings_vs_rule_based_eur": 16738.54
+    }
+  ],
+  "export_ratio": [
+    {
+      "export_ratio": 0.0,
+      "cost_lp_ml_eur": 716311.44,
+      "savings_vs_rule_based_eur": 17815.85,
+      "grid_export_mwh": 136.39,
+      "curtailment_mwh": 2.21
+    },
+    {
+      "export_ratio": 0.25,
+      "cost_lp_ml_eur": 715400.36,
+      "savings_vs_rule_based_eur": 18702.3,
+      "grid_export_mwh": 137.31,
+      "curtailment_mwh": 1.91
+    },
+    {
+      "export_ratio": 0.5,
+      "cost_lp_ml_eur": 714444.86,
+      "savings_vs_rule_based_eur": 19633.18,
+      "grid_export_mwh": 137.31,
+      "curtailment_mwh": 1.91
+    },
+    {
+      "export_ratio": 0.75,
+      "cost_lp_ml_eur": 713489.35,
+      "savings_vs_rule_based_eur": 20564.06,
+      "grid_export_mwh": 137.31,
+      "curtailment_mwh": 1.91
+    },
+    {
+      "export_ratio": 1.0,
+      "cost_lp_ml_eur": 712527.47,
+      "savings_vs_rule_based_eur": 21501.32,
+      "grid_export_mwh": 137.32,
+      "curtailment_mwh": 1.91
     }
   ],
   "forecast_quality": [
     {
+      "noise_fraction": 0.0,
+      "label": "Perfect Foresight",
       "forecast_source": "Perfect Foresight",
       "solar_forecast_rmse_mw": 0.0,
-      "simulated_total_cost_eur": 710390.16,
-      "savings_vs_rule_based_eur": 23638.63,
-      "savings_vs_no_battery_eur": 44069.29,
-      "cycles": 309.57
+      "forecast_nmae_pct": 0.0,
+      "simulated_total_cost_eur": 710393.12,
+      "cost_vs_naive_eur": -1691.69,
+      "savings_vs_rule_based_eur": 23635.67,
+      "savings_vs_no_battery_eur": 44066.33,
+      "cycles": 309.57,
+      "beats_naive": true
     },
     {
+      "noise_fraction": 0.1,
+      "label": "Noise 10%",
+      "forecast_source": "Noise 10%",
+      "solar_forecast_rmse_mw": 0.117,
+      "forecast_nmae_pct": 1.38,
+      "simulated_total_cost_eur": 710690.77,
+      "cost_vs_naive_eur": -1394.04,
+      "savings_vs_rule_based_eur": 23338.02,
+      "savings_vs_no_battery_eur": 43768.68,
+      "cycles": 309.69,
+      "beats_naive": true
+    },
+    {
+      "noise_fraction": 0.2,
+      "label": "Noise 20%",
+      "forecast_source": "Noise 20%",
+      "solar_forecast_rmse_mw": 0.2,
+      "forecast_nmae_pct": 2.54,
+      "simulated_total_cost_eur": 710995.32,
+      "cost_vs_naive_eur": -1089.49,
+      "savings_vs_rule_based_eur": 23033.47,
+      "savings_vs_no_battery_eur": 43464.13,
+      "cycles": 309.51,
+      "beats_naive": true
+    },
+    {
+      "noise_fraction": 0.3,
+      "label": "Noise 30%",
+      "forecast_source": "Noise 30%",
+      "solar_forecast_rmse_mw": 0.29,
+      "forecast_nmae_pct": 3.75,
+      "simulated_total_cost_eur": 711283.46,
+      "cost_vs_naive_eur": -801.35,
+      "savings_vs_rule_based_eur": 22745.33,
+      "savings_vs_no_battery_eur": 43175.99,
+      "cycles": 309.64,
+      "beats_naive": true
+    },
+    {
+      "noise_fraction": 0.4,
+      "label": "Noise 40%",
+      "forecast_source": "Noise 40%",
+      "solar_forecast_rmse_mw": 0.37,
+      "forecast_nmae_pct": 4.8,
+      "simulated_total_cost_eur": 711708.36,
+      "cost_vs_naive_eur": -376.45,
+      "savings_vs_rule_based_eur": 22320.43,
+      "savings_vs_no_battery_eur": 42751.09,
+      "cycles": 310.25,
+      "beats_naive": true
+    },
+    {
+      "noise_fraction": 0.5,
+      "label": "Noise 50%",
+      "forecast_source": "Noise 50%",
+      "solar_forecast_rmse_mw": 0.461,
+      "forecast_nmae_pct": 5.91,
+      "simulated_total_cost_eur": 711971.14,
+      "cost_vs_naive_eur": -113.67,
+      "savings_vs_rule_based_eur": 22057.65,
+      "savings_vs_no_battery_eur": 42488.31,
+      "cycles": 309.45,
+      "beats_naive": true
+    },
+    {
+      "noise_fraction": 0.6,
+      "label": "Noise 60%",
+      "forecast_source": "Noise 60%",
+      "solar_forecast_rmse_mw": 0.547,
+      "forecast_nmae_pct": 7.04,
+      "simulated_total_cost_eur": 712346.64,
+      "cost_vs_naive_eur": 261.83,
+      "savings_vs_rule_based_eur": 21682.15,
+      "savings_vs_no_battery_eur": 42112.81,
+      "cycles": 307.96,
+      "beats_naive": false
+    },
+    {
+      "noise_fraction": 0.8,
+      "label": "Noise 80%",
+      "forecast_source": "Noise 80%",
+      "solar_forecast_rmse_mw": 0.724,
+      "forecast_nmae_pct": 9.26,
+      "simulated_total_cost_eur": 713218.08,
+      "cost_vs_naive_eur": 1133.27,
+      "savings_vs_rule_based_eur": 20810.71,
+      "savings_vs_no_battery_eur": 41241.37,
+      "cycles": 308.14,
+      "beats_naive": false
+    },
+    {
+      "noise_fraction": 1.0,
+      "label": "Noise 100%",
+      "forecast_source": "Noise 100%",
+      "solar_forecast_rmse_mw": 0.862,
+      "forecast_nmae_pct": 10.98,
+      "simulated_total_cost_eur": 714153.01,
+      "cost_vs_naive_eur": 2068.2,
+      "savings_vs_rule_based_eur": 19875.78,
+      "savings_vs_no_battery_eur": 40306.44,
+      "cycles": 308.65,
+      "beats_naive": false
+    },
+    {
+      "noise_fraction": -1.0,
+      "label": "LightGBM Model",
       "forecast_source": "LightGBM Model",
-      "solar_forecast_rmse_mw": 0.568,
-      "simulated_total_cost_eur": 712738.52,
-      "savings_vs_rule_based_eur": 21290.27,
-      "savings_vs_no_battery_eur": 41720.93,
-      "cycles": 310.8
+      "solar_forecast_rmse_mw": 0.519,
+      "forecast_nmae_pct": 5.55,
+      "simulated_total_cost_eur": 712527.47,
+      "cost_vs_naive_eur": 442.66,
+      "savings_vs_rule_based_eur": 21501.32,
+      "savings_vs_no_battery_eur": 41931.98,
+      "cycles": 310.38,
+      "beats_naive": false
     },
     {
-      "forecast_source": "Ridge Model",
-      "solar_forecast_rmse_mw": 0.53,
-      "simulated_total_cost_eur": 712677.37,
-      "savings_vs_rule_based_eur": 21351.42,
-      "savings_vs_no_battery_eur": 41782.08,
-      "cycles": 310.66
-    },
-    {
-      "forecast_source": "Persistence Baseline",
-      "solar_forecast_rmse_mw": 0.598,
-      "simulated_total_cost_eur": 712063.0,
-      "savings_vs_rule_based_eur": 21965.79,
-      "savings_vs_no_battery_eur": 42396.45,
-      "cycles": 310.2
-    },
-    {
-      "forecast_source": "Degraded Forecast (+30% Noise)",
-      "solar_forecast_rmse_mw": 0.612,
-      "simulated_total_cost_eur": 712775.44,
-      "savings_vs_rule_based_eur": 21253.35,
-      "savings_vs_no_battery_eur": 41684.01,
-      "cycles": 310.71
-    },
-    {
-      "forecast_source": "Degraded Forecast (+60% Noise)",
-      "solar_forecast_rmse_mw": 0.729,
-      "simulated_total_cost_eur": 713009.63,
-      "savings_vs_rule_based_eur": 21019.16,
-      "savings_vs_no_battery_eur": 41449.82,
-      "cycles": 309.21
+      "noise_fraction": -2.0,
+      "label": "Last-Available-Day Naive",
+      "forecast_source": "Last-Available-Day Naive",
+      "solar_forecast_rmse_mw": 0.617,
+      "forecast_nmae_pct": 5.81,
+      "simulated_total_cost_eur": 712084.81,
+      "cost_vs_naive_eur": 0.0,
+      "savings_vs_rule_based_eur": 21943.98,
+      "savings_vs_no_battery_eur": 42374.64,
+      "cycles": 310.84,
+      "beats_naive": false
     }
-  ]
+  ],
+  "bootstrap": {
+    "block_bootstrap_n": 1000,
+    "block_size_hours": 168,
+    "ml_forecast_value_ci": {
+      "mean": -438.21,
+      "ci_lower_95": -899.98,
+      "ci_upper_95": -70.48,
+      "std": 206.15
+    },
+    "savings_vs_rule_based_ci": {
+      "mean": 21433.11,
+      "ci_lower_95": 17133.94,
+      "ci_upper_95": 26647.95,
+      "std": 2459.76
+    },
+    "total_savings_vs_no_battery_ci": {
+      "mean": 41691.1,
+      "ci_lower_95": 36312.66,
+      "ci_upper_95": 48141.88,
+      "std": 3150.93
+    },
+    "daily_win_rate_pct": {
+      "Rule-Based": 28.8,
+      "LP + Naive": 56.2,
+      "LP + ML": 15.0
+    },
+    "best_day": {
+      "date": "2020-06-17",
+      "ml_forecast_value_eur": 34.26
+    },
+    "worst_day": {
+      "date": "2020-06-16",
+      "ml_forecast_value_eur": -69.67
+    }
+  },
+  "waterfall": {
+    "cost_no_battery_eur": 754459.45,
+    "cost_rule_based_eur": 734028.79,
+    "cost_lp_naive_eur": 712084.81,
+    "cost_lp_ml_eur": 712527.47,
+    "cost_perfect_foresight_eur": 710239.43,
+    "rule_based_savings_eur": 20430.66,
+    "smarter_scheduling_value_eur": 21943.98,
+    "ml_forecast_value_eur": -442.66,
+    "perfect_foresight_gap_eur": 2288.04,
+    "total_realized_savings_eur": 41931.98,
+    "total_possible_savings_eur": 44220.02,
+    "realized_share_of_possible_pct": 94.83
+  }
 }

@@ -49,22 +49,32 @@ def test_strategy_comparison_ordering_and_invariants(sample_site_data):
         retail_adder_eur_mwh=20.0,
     )
 
-    results, summary_df = compare_dispatch_strategies(
+    results, summary_df, waterfall = compare_dispatch_strategies(
         site_df=sample_site_data,
-        solar_forecast_mw=sample_site_data["solar_forecast_mw"],
+        solar_forecast_ml_mw=sample_site_data["solar_forecast_mw"],
         load_forecast_mw=sample_site_data["load_forecast_mw"],
+        solar_forecast_naive_mw=sample_site_data["solar_forecast_mw"],
         battery_cfg=cfg,
     )
 
     c_no = results["no_battery"].total_cost_eur
     c_rule = results["rule_based"].total_cost_eur
-    c_fc = results["forecast_informed"].total_cost_eur
+    c_fc = results["lp_ml"].total_cost_eur
     c_perf = results["perfect_foresight"].total_cost_eur
 
     # Invariants: 0 violations, ~0 energy balance residual
     for name, r in results.items():
         assert r.constraint_violations == 0, f"Strategy {name} had constraint violations!"
         assert r.max_energy_balance_residual < 1e-4, f"Strategy {name} had energy balance residual {r.max_energy_balance_residual}"
+
+    # Waterfall decomposition steps must sum to total possible savings
+    step_sum = (
+        waterfall["rule_based_savings_eur"]
+        + waterfall["smarter_scheduling_value_eur"]
+        + waterfall["ml_forecast_value_eur"]
+        + waterfall["perfect_foresight_gap_eur"]
+    )
+    assert abs(step_sum - waterfall["total_possible_savings_eur"]) < 0.05, f"Waterfall steps sum {step_sum} != {waterfall['total_possible_savings_eur']}"
 
     # Perfect foresight is theoretical upper bound on savings (lowest cost)
     assert c_perf <= c_fc + 1e-2, f"Perfect foresight cost {c_perf} should be <= forecast-informed {c_fc}"

@@ -1,0 +1,8 @@
+a204988c5b9e703427ea44473d3c6622be9d3ec7
+ M notebooks/01_data_audit.ipynb
+ M notebooks/02_exploratory_analysis.ipynb
+ M notebooks/03_forecasting.ipynb
+ M notebooks/04_battery_simulation.ipynb
+ M notebooks/05_model_evaluation.ipynb
+ M reports/model_leaderboard.csv
+?? reports/before_upgrade/

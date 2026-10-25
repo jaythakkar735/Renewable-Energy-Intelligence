@@ -1,0 +1,35 @@
+{
+  "block_bootstrap_n": 1000,
+  "block_size_hours": 168,
+  "ml_forecast_value_ci": {
+    "mean": -438.21,
+    "ci_lower_95": -899.98,
+    "ci_upper_95": -70.48,
+    "std": 206.15
+  },
+  "savings_vs_rule_based_ci": {
+    "mean": 21433.11,
+    "ci_lower_95": 17133.94,
+    "ci_upper_95": 26647.95,
+    "std": 2459.76
+  },
+  "total_savings_vs_no_battery_ci": {
+    "mean": 41691.1,
+    "ci_lower_95": 36312.66,
+    "ci_upper_95": 48141.88,
+    "std": 3150.93
+  },
+  "daily_win_rate_pct": {
+    "Rule-Based": 28.8,
+    "LP + Naive": 56.2,
+    "LP + ML": 15.0
+  },
+  "best_day": {
+    "date": "2020-06-17",
+    "ml_forecast_value_eur": 34.26
+  },
+  "worst_day": {
+    "date": "2020-06-16",
+    "ml_forecast_value_eur": -69.67
+  }
+}

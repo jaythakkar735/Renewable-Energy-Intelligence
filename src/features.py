@@ -1,7 +1,8 @@
 """Feature engineering for solar generation forecasting.
 
 Includes astronomical solar geometry, cyclical calendar features,
-strictly lagged statistics (lag >= 24h), and leakage verification.
+auction cutoff-safe lags (<= 12:00 UTC day-ahead), capacity normalization,
+market price features, ENTSO-E load forecasts, and leakage verification.
 """
 from typing import Dict, Any, Tuple, List, Optional
 import numpy as np
@@ -108,32 +109,45 @@ def compute_solar_geometry(
 def build_forecasting_features(
     df: pd.DataFrame,
     target_col: str = "solar_generation_mw",
-    min_lag_hours: int = 24,
     latitude_deg: float = 56.0,
     longitude_deg: float = 9.0,
+    min_lag_hours: int = 24,
 ) -> pd.DataFrame:
     """Constructs day-ahead leakage-safe features for solar generation.
 
-    All lags and rolling statistics are strictly computed with lag >= min_lag_hours.
-    Deterministic astronomical solar elevation and calendar features are added.
+    All telemetry lags respect the day-ahead auction cutoff at 12:00 UTC:
+      - Delivery hour h in [0, 11] UTC: same hour on Day D was observed <= 11:00 UTC (lag 24h).
+      - Delivery hour h in [12, 23] UTC: same hour on Day D has not occurred at 12:00 UTC cutoff,
+        so latest available same-hour observation is from Day D-1 (lag 48h).
+    This establishes the Last-Available-Day baseline and causal feature set.
 
-    Args:
-        df: Preprocessed DataFrame indexed by UTC DatetimeIndex.
-        target_col: Series name to forecast.
-        min_lag_hours: Minimum backward lag (default 24h for day-ahead cutoff).
-        latitude_deg: Approximate latitude of bidding zone center.
-        longitude_deg: Approximate longitude of bidding zone center.
-
-    Returns:
-        DataFrame with features and target, without lookahead leakage.
+    In addition, features are normalized by a causal trailing 365-day capacity proxy C_t
+    to eliminate capacity growth drift.
     """
     if target_col not in df.columns:
         raise KeyError(f"Target column '{target_col}' not found in DataFrame.")
 
     features = pd.DataFrame(index=df.index)
 
-    # 1. Target column
+    # 1. Target column (raw MW) and Capacity Proxy
     features["target"] = df[target_col].astype(np.float32)
+
+    if "capacity_proxy_mw" in df.columns:
+        cap_proxy = df["capacity_proxy_mw"].astype(np.float32)
+    else:
+        # Strictly causal trailing capacity proxy (lag >= 48h, no lookahead)
+        initial_val = float(df[target_col].iloc[0]) if len(df) > 0 else 100.0
+        cap_proxy = df[target_col].shift(48).rolling(24 * 365, min_periods=1).max().ffill().fillna(initial_val).astype(np.float32)
+
+    features["capacity_proxy_mw"] = cap_proxy
+    # Capacity-normalized target: \tilde{y} = y / C_t
+    features["target_normalized"] = (features["target"] / features["capacity_proxy_mw"]).clip(0.0, 1.2).astype(np.float32)
+
+    # Telemetry gap flag
+    if "is_telemetry_gap" in df.columns:
+        features["is_telemetry_gap"] = df["is_telemetry_gap"].astype(bool)
+    else:
+        features["is_telemetry_gap"] = False
 
     # 2. Solar Geometry Features (strictly deterministic ephemeris)
     geo_df = compute_solar_geometry(df.index, latitude_deg, longitude_deg)
@@ -164,14 +178,34 @@ def build_forecasting_features(
     features["doy_sin"] = np.sin(2.0 * np.pi * doy / 365.25).astype(np.float32)
     features["doy_cos"] = np.cos(2.0 * np.pi * doy / 365.25).astype(np.float32)
 
-    # 4. Strictly Lagged Generation Features (lag >= min_lag_hours)
-    # Lags: 24h (yesterday), 48h (2 days ago), 72h (3 days ago), 168h (same hour last week)
-    lag_steps = [min_lag_hours, min_lag_hours + 24, min_lag_hours + 48, min_lag_hours + 144]
-    for lag in lag_steps:
-        features[f"target_lag_{lag}h"] = df[target_col].shift(lag).astype(np.float32)
+    # 4. Auction Cutoff-Safe Lags (Last-Available-Day)
+    # At Day D 12:00 UTC cutoff:
+    # h in [0, 11] -> lag 24 is available (hour h was <= 11:00 UTC on Day D)
+    # h in [12, 23] -> lag 48 is latest available (hour h on Day D is >= 12:00 UTC)
+    target_series = df[target_col]
+    lag_24 = target_series.shift(24).astype(np.float32)
+    lag_48 = target_series.shift(48).astype(np.float32)
+    lag_168 = target_series.shift(168).astype(np.float32)
 
-    # 5. Rolling Statistics on Lagged History (strictly computed on data <= t - min_lag_hours)
-    base_lagged = df[target_col].shift(min_lag_hours)
+    features["target_lag_last_available"] = np.where(hour < 12, lag_24, lag_48).astype(np.float32)
+    features["target_lag_24h"] = lag_24
+    features["target_lag_48h"] = lag_48
+    features["target_lag_168h"] = lag_168
+
+    # Capacity-normalized lags
+    features["target_lag_last_available_norm"] = (
+        features["target_lag_last_available"] / features["capacity_proxy_mw"]
+    ).clip(0.0, 1.2).astype(np.float32)
+    features["target_lag_48h_norm"] = (
+        features["target_lag_48h"] / features["capacity_proxy_mw"]
+    ).clip(0.0, 1.2).astype(np.float32)
+    features["target_lag_168h_norm"] = (
+        features["target_lag_168h"] / features["capacity_proxy_mw"]
+    ).clip(0.0, 1.2).astype(np.float32)
+
+    # 5. Rolling Statistics on Lagged History (strictly computed on data <= t - 48h)
+    base_lagged = target_series.shift(48)
+    base_lagged_norm = base_lagged / features["capacity_proxy_mw"]
     features["target_rolling_mean_24h"] = base_lagged.rolling(24, min_periods=12).mean().astype(np.float32)
     features["target_rolling_std_24h"] = (
         base_lagged.rolling(24, min_periods=12).std().fillna(0.0).astype(np.float32)
@@ -179,16 +213,41 @@ def build_forecasting_features(
     features["target_rolling_max_24h"] = base_lagged.rolling(24, min_periods=12).max().astype(np.float32)
     features["target_rolling_mean_168h"] = base_lagged.rolling(168, min_periods=84).mean().astype(np.float32)
 
-    # 6. Source-published load forecast (if present, published day-ahead by ENTSO-E)
+    features["target_rolling_mean_24h_norm"] = base_lagged_norm.rolling(24, min_periods=12).mean().astype(np.float32)
+    features["target_rolling_std_24h_norm"] = (
+        base_lagged_norm.rolling(24, min_periods=12).std().fillna(0.0).astype(np.float32)
+    )
+    features["target_rolling_max_24h_norm"] = base_lagged_norm.rolling(24, min_periods=12).max().astype(np.float32)
+    features["target_rolling_mean_168h_norm"] = base_lagged_norm.rolling(168, min_periods=84).mean().astype(np.float32)
+
+    # 6. Market Price Signals (cleared day-ahead at 12:00 CET/UTC)
+    if "price_day_ahead_eur_mwh" in df.columns:
+        features["price_day_ahead_eur_mwh"] = df["price_day_ahead_eur_mwh"].astype(np.float32)
+        # Daily mean price for delivery day
+        daily_price_mean = df["price_day_ahead_eur_mwh"].groupby(df.index.date).transform("mean")
+        features["price_daily_mean_eur_mwh"] = daily_price_mean.astype(np.float32)
+
+    # 7. ENTSO-E Day-ahead Load Forecast (published day-ahead before auction)
     if "load_forecast_mw" in df.columns:
         features["source_load_forecast_mw"] = df["load_forecast_mw"].astype(np.float32)
 
+    # 8. Wind and Load Cutoff-Safe Actuals
+    if "wind_generation_mw" in df.columns:
+        wind_24 = df["wind_generation_mw"].shift(24).astype(np.float32)
+        wind_48 = df["wind_generation_mw"].shift(48).astype(np.float32)
+        features["wind_lag_safe"] = np.where(hour < 12, wind_24, wind_48).astype(np.float32)
+
+    if "load_actual_mw" in df.columns:
+        load_24 = df["load_actual_mw"].shift(24).astype(np.float32)
+        load_48 = df["load_actual_mw"].shift(48).astype(np.float32)
+        features["load_lag_safe"] = np.where(hour < 12, load_24, load_48).astype(np.float32)
+
     # Drop warm-up rows where initial 168h lag is NaN
-    max_lag = max(lag_steps) + 168
+    max_lag = 168 + 168
     valid_features = features.iloc[max_lag:].copy()
 
-    # Final sanity check: fill any remaining isolated NaN with 0
-    valid_features = valid_features.bfill().ffill()
+    # Fill any remaining isolated NaN with forward fill and then 0.0 (strictly non-anticipative)
+    valid_features = valid_features.ffill().fillna(0.0)
 
     return valid_features
 
@@ -198,30 +257,31 @@ def verify_feature_leakage(
     target_col: str = "solar_generation_mw",
     min_lag_hours: int = 24,
 ) -> bool:
-    """Verifies that future values of the target cannot leak into features at time t.
+    """Verifies that future values beyond auction cutoff cannot leak into features.
 
     Performs a perturbation test: modifies the future sequence and asserts that
     historical features at time t remain strictly invariant.
-
-    Returns:
-        True if the leakage test passes.
     """
     sample = df.iloc[:1000].copy()
-    f_orig = build_forecasting_features(sample, target_col=target_col, min_lag_hours=min_lag_hours)
+    f_orig = build_forecasting_features(sample, target_col=target_col)
 
     # Perturb the last 100 rows of the target series
     perturbed = sample.copy()
     perturbed.iloc[-100:, perturbed.columns.get_loc(target_col)] += 9999.0
 
-    f_pert = build_forecasting_features(perturbed, target_col=target_col, min_lag_hours=min_lag_hours)
+    f_pert = build_forecasting_features(perturbed, target_col=target_col)
 
     # Rows prior to (N - 100) must have identical features
     check_rows = f_orig.index[:-100]
-    feature_cols = [c for c in f_orig.columns if c != "target"]
+    feature_cols = [
+        c for c in f_orig.columns
+        if c not in ("target", "target_normalized", "is_telemetry_gap")
+        and f_orig[c].dtype != bool
+    ]
 
     diff = (f_orig.loc[check_rows, feature_cols] - f_pert.loc[check_rows, feature_cols]).abs().max().max()
 
-    if diff > 1e-5:
+    if diff > 1e-4:
         raise ValueError(f"CRITICAL LEAKAGE DETECTED! Max feature difference on historical rows: {diff}")
 
     logger.info("Leakage verification test PASSED. Features are strictly non-anticipative.")

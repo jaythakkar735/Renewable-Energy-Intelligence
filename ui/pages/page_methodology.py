@@ -7,31 +7,43 @@ from pathlib import Path
 import plotly.graph_objects as go
 from sklearn.inspection import permutation_importance
 
-from ui.theme import get_plotly_layout, COLOR_CYAN, COLOR_EMERALD, COLOR_AMBER
+from ui.theme import (
+    render_page_header,
+    render_provenance_footer,
+    get_plotly_layout,
+    get_current_theme,
+)
 
 
 def render_page_methodology(config: dict, technical_mode: bool):
     """Renders the methodology, explainability, and glossary documentation."""
-    st.markdown("## Methodology & Explainability")
-    st.markdown(
-        "<p style='color: #94A3B8; font-size: 0.95rem; margin-top: -10px;'>"
-        "Detailed mathematical formulations, feature importance, battery dispatch equations, and project glossary."
-        "</p>",
-        unsafe_allow_html=True,
+    summary_sentence = (
+        "The modeling pipeline strictly enforces the 12:00 UTC day-ahead gate closure, "
+        "normalizes targets with a causal trailing capacity proxy, solves a rolling 24-hour Linear Program "
+        "via the HiGHS solver, and validates uncertainty with split-conformal coverage."
     )
 
+    render_page_header(
+        title="Methodology, Formulations & Explainability",
+        subtitle="Mathematical Optimization Specs, Astronomical Ephemeris, Permutation Importance, and Energy Glossary",
+        summary_sentence=summary_sentence,
+        icon_name="book",
+    )
+
+    t = get_current_theme()
+
     tab_m1, tab_m2, tab_m3, tab_m4 = st.tabs([
-        "Feature Importance", "Optimization Formulation", "Physical Constraints", "Glossary"
+        "Feature Importance", "Optimization Formulation", "Capacity & Solar Ephemeris", "Glossary"
     ])
 
     with tab_m1:
-        st.markdown("### Permutation Feature Importance on Holdout Test Set")
+        st.markdown("### Permutation Feature Importance (Holdout Test Period)")
         st.markdown(
-            "Permutation feature importance measures the increase in model prediction error after shuffling each feature on the chronological test set (Jan–Sep 2020)."
+            "Permutation feature importance measures the increase in model prediction error (MAE in MW) after shuffling "
+            "each feature column on the test set. Features with highest impact are the strictly cutoff-safe lags and astronomical geometry."
         )
 
         models_dir = Path(__file__).resolve().parent.parent.parent / "models"
-        reports_dir = Path(__file__).resolve().parent.parent.parent / "reports"
         lgb_file = models_dir / "lightgbm_model.joblib"
         clean_file = Path(__file__).resolve().parent.parent.parent / "data" / "processed" / "DK_1_clean.parquet"
 
@@ -43,45 +55,49 @@ def render_page_methodology(config: dict, technical_mode: bool):
             feat_df = build_forecasting_features(
                 clean_df,
                 target_col=config["forecasting"]["target"],
-                min_lag_hours=24,
                 latitude_deg=config["data"]["latitude"],
                 longitude_deg=config["data"]["longitude"],
             )
             _, _, test_df = split_train_val_test(feat_df, config)
 
-            feature_cols = [c for c in feat_df.columns if c != "target"]
+            non_feature_cols = {
+                "target", "target_normalized", "is_telemetry_gap",
+                "target_lag_last_available", "target_lag_24h", "target_lag_48h", "target_lag_168h",
+                "target_rolling_mean_24h", "target_rolling_std_24h", "target_rolling_max_24h", "target_rolling_mean_168h",
+            }
+            feature_cols = [c for c in feat_df.columns if c not in non_feature_cols]
             X_test = test_df[feature_cols].values
-            y_test = test_df["target"].values
+            y_test_norm = test_df["target_normalized"].values
 
             model = joblib.load(lgb_file)
 
-            # Permutation importance (subsample 1500 rows for instant rendering)
-            sub_idx = np.linspace(0, len(X_test) - 1, 1500, dtype=int)
+            # Fast subsampled permutation importance
+            sub_idx = np.linspace(0, len(X_test) - 1, 1200, dtype=int)
             perm = permutation_importance(
-                model, X_test[sub_idx], y_test[sub_idx],
+                model, X_test[sub_idx], y_test_norm[sub_idx],
                 n_repeats=3, random_state=42, scoring="neg_mean_absolute_error"
             )
 
             imp_df = pd.DataFrame({
                 "Feature": feature_cols,
-                "Importance (MAE Drop MW)": perm.importances_mean,
-            }).sort_values("Importance (MAE Drop MW)", ascending=True)
+                "Importance": perm.importances_mean,
+            }).sort_values("Importance", ascending=True).tail(12)
 
             fig_imp = go.Figure()
             fig_imp.add_trace(
                 go.Bar(
                     y=imp_df["Feature"],
-                    x=imp_df["Importance (MAE Drop MW)"],
+                    x=imp_df["Importance"],
                     orientation="h",
-                    marker_color=COLOR_CYAN,
+                    marker_color=t["accent_emerald"],
                 )
             )
             fig_imp.update_layout(
                 get_plotly_layout(
-                    title="Permutation Feature Importance (LightGBM on Test Set)",
-                    xaxis_title="Increase in MAE when Shuffled (MW)",
+                    title="Top 12 Features by Permutation Importance (LightGBM)",
+                    xaxis_title="MAE Increase when Feature Shuffled (Normalized)",
                     yaxis_title="",
-                    height=450,
+                    height=420,
                 )
             )
             st.plotly_chart(fig_imp, use_container_width=True)
@@ -90,47 +106,57 @@ def render_page_methodology(config: dict, technical_mode: bool):
         st.markdown("### Linear Programming Optimization Formulation")
         st.markdown(
             r"""
-            At day-ahead decision time ($t=0$), the controller optimizes over horizon $H=24$ hours:
+            At day-ahead decision cutoff ($t=0$), the system controller solves a rolling Linear Program over horizon $H=24$ hours:
 
-            $$\min_{\{p_{\text{ch}}, p_{\text{dis}}, p_{\text{imp}}, p_{\text{exp}}\}} \sum_{t=0}^{H-1} \left( (\lambda_{\text{da}}(t) + \text{Adder}) p_{\text{imp}}(t) - (\lambda_{\text{da}}(t) \cdot \text{ExportRatio}) p_{\text{exp}}(t) + C_{\text{deg}}(p_{\text{ch}}(t) + p_{\text{dis}}(t)) \right) \Delta t$$
+            $$\min_{\{p_{\text{ch}}, p_{\text{dis}}, p_{\text{imp}}, p_{\text{exp}}, p_{\text{curt}}\}} \sum_{t=0}^{H-1} \left( (\lambda_{\text{da}}(t) + \lambda_{\text{adder}}) p_{\text{imp}}(t) - (\lambda_{\text{da}}(t) \cdot r_{\text{exp}}) p_{\text{exp}}(t) + C_{\text{deg}}(p_{\text{ch}}(t) + p_{\text{dis}}(t)) \right) \Delta t$$
 
             **Subject to:**
-            1. **Power Balance Equality**:
+            1. **Power Balance Equality ($\forall t$):**
                $$G_{\text{fc}}(t) + p_{\text{dis}}(t) + p_{\text{imp}}(t) - p_{\text{curt}}(t) = L_{\text{fc}}(t) + p_{\text{ch}}(t) + p_{\text{exp}}(t)$$
-            2. **Dynamic State-of-Charge Transitions**:
-               $$\text{SoC}(t) = \text{SoC}(t-1) + \frac{\eta_{\text{ch}} p_{\text{ch}}(t) \Delta t}{E_{\text{cap}}} - \frac{p_{\text{dis}}(t) \Delta t}{\eta_{\text{dis}} E_{\text{cap}}}$$
-            3. **Operational Bounds**:
+            2. **Dynamic State-of-Charge Transitions ($\forall t$):**
+               $$\text{SoC}(t) = \text{SoC}(t-1) + \frac{\eta_{\text{ch}} \cdot p_{\text{ch}}(t) \cdot \Delta t}{E_{\text{cap}}} - \frac{p_{\text{dis}}(t) \cdot \Delta t}{\eta_{\text{dis}} \cdot E_{\text{cap}}}$$
+            3. **Power Rating Limits:**
                $$0 \le p_{\text{ch}}(t) \le P_{\text{max,ch}}, \quad 0 \le p_{\text{dis}}(t) \le P_{\text{max,dis}}$$
-               $$0 \le p_{\text{imp}}(t) \le P_{\text{grid,imp,max}}, \quad 0 \le p_{\text{exp}}(t) \le P_{\text{grid,exp,max}}$$
-               $$\text{SoC}_{\min} \le \text{SoC}(t) \le \text{SoC}_{\max}, \quad \text{SoC}(H-1) \ge \text{SoC}_{\text{term}}$$
+            4. **Grid Headroom Interconnect Limits:**
+               $$0 \le p_{\text{imp}}(t) \le P_{\text{grid,imp}}, \quad 0 \le p_{\text{exp}}(t) \le P_{\text{grid,exp}}$$
+            5. **Physical Buffer Constraints:**
+               $$\text{SoC}_{\text{min}} \le \text{SoC}(t) \le \text{SoC}_{\text{max}}, \quad \text{SoC}(H-1) \ge \text{SoC}_{\text{terminal}}$$
+            6. **Negative Price & Energy Burning Protection:**
+               $$0 \le p_{\text{curt}}(t) \le \max(0, G_{\text{fc}}(t)), \quad p_{\text{ch}}(t) \cdot p_{\text{dis}}(t) = 0$$
             """
         )
 
     with tab_m3:
-        st.markdown("### Physical Invariants & Non-Simultaneous Dispatch")
+        st.markdown("### Capacity Normalization & Astronomical Solar Geometry")
         st.markdown(
             r"""
-            - **No Simultaneous Charging and Discharging**:
-              Because round-trip efficiency is strictly below 100% ($\eta_{\text{ch}}\eta_{\text{dis}} < 1.0$), and the grid retail price adder ensures that buying power is strictly more expensive than selling power, any simultaneous charging and discharging incurs net physical losses and economic cost. Therefore, the optimal Linear Programming vertex strictly satisfies:
-              $$\min(p_{\text{ch}}(t), p_{\text{dis}}(t)) = 0$$
-            - **Energy Balance Residual**:
-              $$\text{Residual}(t) = |(G(t) + P_{\text{dis}}(t) + P_{\text{imp}}(t)) - (L(t) + P_{\text{ch}}(t) + P_{\text{exp}}(t) + P_{\text{curt}}(t))| \equiv 0.0$$
+            #### 1. Causal Trailing Capacity Normalization
+            To eliminate the negative bias from Danish solar capacity expansion (+107% from 2015 to 2020), the target is normalized by a strictly causal trailing capacity proxy:
+            $$\tilde{y}_t = \frac{y_t}{C_t}, \quad \text{where} \quad C_t = \max_{k \in [48, 8760]} y_{t-k}$$
+            At forecast inference time:
+            $$\hat{y}_t = \text{clip}\left(\hat{\tilde{y}}_t, 0, 1.15\right) \times C_t, \quad \text{with hard night zero: } \hat{y}_t = 0 \text{ when } \alpha_t \le 0$$
+
+            #### 2. Astronomical Solar Position (Spencer 1971 / Iqbal)
+            The solar elevation angle $\alpha_t$ and clear-sky proxy are computed deterministically from UTC timestamps:
+            $$\gamma = \frac{2\pi}{365.25} (d_{\text{oy}} - 1 + \frac{h - 12}{24})$$
+            $$\delta = 0.006918 - 0.399912\cos\gamma + 0.070257\sin\gamma - 0.006758\cos 2\gamma + \dots$$
+            $$\sin\alpha_t = \sin\phi\sin\delta + \cos\phi\cos\delta\cos\omega_t$$
             """
         )
 
     with tab_m4:
-        st.markdown("### Technical Energy Systems Glossary")
+        st.markdown("### Technical Glossary of Terms")
         glossary = [
-            ("MAE (Mean Absolute Error)", "Average magnitude of forecast errors in MW without considering their sign."),
-            ("RMSE (Root Mean Squared Error)", "Square root of the average squared errors; penalizes large outlier errors more heavily than MAE."),
-            ("nMAE (Normalized MAE)", "MAE divided by installed peak capacity, expressed as a percentage."),
-            ("Skill Score", "Fractional error reduction of a candidate model relative to a naive persistence benchmark: 1 - (MAE_model / MAE_baseline)."),
-            ("SoC (State of Charge)", "The current energy content of the battery expressed as a percentage of total capacity (0% to 100%)."),
-            ("Round-Trip Efficiency (RTE)", "The ratio of energy retrieved during discharging to energy supplied during charging (typically 85% to 92% for lithium-ion)."),
-            ("Curtailment", "Deliberate reduction in renewable generator output below available capability to prevent overgeneration or negative price penalties."),
-            ("Day-Ahead Spot Price", "Wholesale electricity price cleared hourly in auction markets for delivery on the following day."),
-            ("Perfect Foresight", "A theoretical benchmark assuming future weather and load demand are known with 100% accuracy."),
-            ("Equivalent Full Cycle (EFC)", "Cumulative throughput normalized by battery capacity: (Energy Charged + Energy Discharged) / (2 * Capacity)."),
+            ("Day-Ahead Gate Closure", "The 12:00 UTC market cutoff when electricity bids for delivery day D+1 are submitted to Nord Pool / EPEX Spot."),
+            ("Last-Available-Day Baseline", "The strictly non-anticipative baseline using lag 24h for hours < 12 UTC and lag 48h for hours >= 12 UTC."),
+            ("Round-Trip Efficiency (RTE)", "The percentage of energy retrieved from the battery relative to the energy supplied to charge it."),
+            ("Equivalent Full Cycles (EFC)", "Cumulative throughput normalized by battery capacity: EFC = (Total Charged + Total Discharged) / (2 * Capacity)."),
+            ("Split-Conformal Prediction", "A distribution-free method that provides finite-sample coverage guarantees without parametric distribution assumptions."),
+            ("HiGHS Solver", "A state-of-the-art open-source dual simplex and interior-point solver used via scipy.optimize.linprog."),
+            ("Negative Electricity Pricing", "Hours where wholesale spot prices fall below 0 EUR/MWh due to high renewable output and low demand."),
+            ("Energy Burning", "An unphysical pathology where an optimizer imports negative-priced power and immediately curtails it; prevented by bounding curtailment to available solar."),
         ]
-        for term, desc in glossary:
-            st.markdown(f"**{term}**: {desc}")
+        df_g = pd.DataFrame(glossary, columns=["Term", "Definition"])
+        st.dataframe(df_g, use_container_width=True, hide_index=True)
+
+    render_provenance_footer()

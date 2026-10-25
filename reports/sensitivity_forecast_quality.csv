@@ -1,7 +1,12 @@
-forecast_source,solar_forecast_rmse_mw,simulated_total_cost_eur,savings_vs_rule_based_eur,savings_vs_no_battery_eur,cycles
-Perfect Foresight,0.0,710390.16,23638.63,44069.29,309.57
-LightGBM Model,0.568,712738.52,21290.27,41720.93,310.8
-Ridge Model,0.53,712677.37,21351.42,41782.08,310.66
-Persistence Baseline,0.598,712063.0,21965.79,42396.45,310.2
-Degraded Forecast (+30% Noise),0.612,712775.44,21253.35,41684.01,310.71
-Degraded Forecast (+60% Noise),0.729,713009.63,21019.16,41449.82,309.21
+noise_fraction,label,forecast_source,solar_forecast_rmse_mw,forecast_nmae_pct,simulated_total_cost_eur,cost_vs_naive_eur,savings_vs_rule_based_eur,savings_vs_no_battery_eur,cycles,beats_naive
+0.0,Perfect Foresight,Perfect Foresight,0.0,0.0,710393.12,-1691.69,23635.67,44066.33,309.57,True
+0.1,Noise 10%,Noise 10%,0.117,1.38,710690.77,-1394.04,23338.02,43768.68,309.69,True
+0.2,Noise 20%,Noise 20%,0.2,2.54,710995.32,-1089.49,23033.47,43464.13,309.51,True
+0.3,Noise 30%,Noise 30%,0.29,3.75,711283.46,-801.35,22745.33,43175.99,309.64,True
+0.4,Noise 40%,Noise 40%,0.37,4.8,711708.36,-376.45,22320.43,42751.09,310.25,True
+0.5,Noise 50%,Noise 50%,0.461,5.91,711971.14,-113.67,22057.65,42488.31,309.45,True
+0.6,Noise 60%,Noise 60%,0.547,7.04,712346.64,261.83,21682.15,42112.81,307.96,False
+0.8,Noise 80%,Noise 80%,0.724,9.26,713218.08,1133.27,20810.71,41241.37,308.14,False
+1.0,Noise 100%,Noise 100%,0.862,10.98,714153.01,2068.2,19875.78,40306.44,308.65,False
+-1.0,LightGBM Model,LightGBM Model,0.519,5.55,712527.47,442.66,21501.32,41931.98,310.38,False
+-2.0,Last-Available-Day Naive,Last-Available-Day Naive,0.617,5.81,712084.81,0.0,21943.98,42374.64,310.84,False

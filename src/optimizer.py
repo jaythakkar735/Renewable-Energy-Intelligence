@@ -105,11 +105,13 @@ def solve_day_ahead_dispatch_lp(
     # Variable bounds: (min, max)
     bounds = []
     for t in range(H):
+        s_avail = float(max(0.0, solar_forecast_mw[t]))
         bounds.append((0.0, battery_cfg.max_charge_power_mw))       # p_ch
         bounds.append((0.0, battery_cfg.max_discharge_power_mw))    # p_dis
         bounds.append((0.0, battery_cfg.grid_import_limit_mw))      # p_imp
         bounds.append((0.0, battery_cfg.grid_export_limit_mw))      # p_exp
-        bounds.append((0.0, None))                                  # p_curt
+        # Curtailment is bounded by available solar to prevent negative-price energy burning
+        bounds.append((0.0, s_avail))                               # p_curt
         # Terminal constraint on the final step
         if t == H - 1 and terminal_soc is not None:
             bounds.append((max(battery_cfg.soc_min, terminal_soc), battery_cfg.soc_max))
@@ -149,6 +151,13 @@ def solve_day_ahead_dispatch_lp(
     p_curtail = np.clip(sol[:, 4], 0.0, None)
     soc_vals = np.clip(sol[:, 5], battery_cfg.soc_min, battery_cfg.soc_max)
 
+    # Post-solve physical complementarity: guarantee no simultaneous charge and discharge
+    overlap = (p_charge > 1e-4) & (p_discharge > 1e-4)
+    if np.any(overlap):
+        net = p_charge - p_discharge
+        p_charge = np.where(net > 0, net, 0.0)
+        p_discharge = np.where(net < 0, -net, 0.0)
+
     return {
         "p_charge": p_charge,
         "p_discharge": p_discharge,
@@ -158,5 +167,5 @@ def solve_day_ahead_dispatch_lp(
         "soc": soc_vals,
         "status": res.status,
         "message": res.message,
-        "cost_objective": float(res.fun),
+        "cost_objective": res.fun,
     }

@@ -1,0 +1,62 @@
+[
+  {
+    "Strategy":"No Battery Baseline",
+    "Total Cost (EUR)":754459.45,
+    "Savings vs No Battery (EUR)":0.0,
+    "Savings vs No Battery (%)":0.0,
+    "Savings vs Rule-Based (EUR)":-20430.66,
+    "Energy Charged (MWh)":0.0,
+    "Energy Discharged (MWh)":0.0,
+    "Grid Import (MWh)":16835.54,
+    "Grid Export (MWh)":120.3,
+    "Curtailment (MWh)":8.42,
+    "Eq. Full Cycles":0.0,
+    "Max Balance Residual (MW)":0.0,
+    "Violations":0
+  },
+  {
+    "Strategy":"Rule-Based Strategy",
+    "Total Cost (EUR)":734028.79,
+    "Savings vs No Battery (EUR)":20430.66,
+    "Savings vs No Battery (%)":2.71,
+    "Savings vs Rule-Based (EUR)":0.0,
+    "Energy Charged (MWh)":1917.95,
+    "Energy Discharged (MWh)":1687.15,
+    "Grid Import (MWh)":16952.53,
+    "Grid Export (MWh)":14.9,
+    "Curtailment (MWh)":0.0,
+    "Eq. Full Cycles":180.26,
+    "Max Balance Residual (MW)":0.0,
+    "Violations":0
+  },
+  {
+    "Strategy":"Forecast-Informed (LP)",
+    "Total Cost (EUR)":712738.52,
+    "Savings vs No Battery (EUR)":41720.93,
+    "Savings vs No Battery (%)":5.53,
+    "Savings vs Rule-Based (EUR)":21290.27,
+    "Energy Charged (MWh)":3306.34,
+    "Energy Discharged (MWh)":2909.58,
+    "Grid Import (MWh)":17259.09,
+    "Grid Export (MWh)":153.06,
+    "Curtailment (MWh)":2.45,
+    "Eq. Full Cycles":310.8,
+    "Max Balance Residual (MW)":0.0,
+    "Violations":0
+  },
+  {
+    "Strategy":"Perfect Foresight (Reference)",
+    "Total Cost (EUR)":710237.4399999999,
+    "Savings vs No Battery (EUR)":44222.01,
+    "Savings vs No Battery (%)":5.86,
+    "Savings vs Rule-Based (EUR)":23791.35,
+    "Energy Charged (MWh)":3294.79,
+    "Energy Discharged (MWh)":2899.42,
+    "Grid Import (MWh)":17108.19,
+    "Grid Export (MWh)":5.04,
+    "Curtailment (MWh)":0.94,
+    "Eq. Full Cycles":309.71,
+    "Max Balance Residual (MW)":0.0,
+    "Violations":0
+  }
+]
