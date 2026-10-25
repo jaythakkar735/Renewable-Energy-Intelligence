@@ -13,11 +13,17 @@ conda-env/
 .ipynb_checkpoints/
 */.ipynb_checkpoints/*
 
-# Data (Raw and Processed files must never be committed)
+# Data (Raw, Processed, and Prediction binary files must never be committed)
+*.parquet
+*.feather
+*.h5
+*.hdf5
 data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+reports/*.parquet
+reports/*/*.parquet
 
 # Models & Artifacts
 models/*.joblib
