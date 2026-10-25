@@ -55,21 +55,24 @@ def main():
         index=0 if st.session_state["theme_mode"] == "light" else 1,
         help="Switch between light professional theme (default) and dark mode.",
     )
-    st.session_state["theme_mode"] = "dark" if "Dark" in theme_choice else "light"
+    new_theme = "dark" if "Dark" in theme_choice else "light"
+    if new_theme != st.session_state["theme_mode"]:
+        st.session_state["theme_mode"] = new_theme
+        st.rerun()
 
     # Apply CSS for chosen theme
     apply_custom_css()
 
     config = load_config()
 
-    # Audience Mode Toggle
+    # View Perspective Toggle (Operator / Executive vs. Engineer / Technical)
     view_mode = st.sidebar.radio(
-        "Audience Mode",
-        options=["Plain-Language (Executive)", "Technical (Energy Systems)"],
+        "View Perspective",
+        options=["Operator / Executive View", "Engineer / Technical View"],
         index=0,
-        help="Toggle between high-level executive summaries and in-depth engineering formulas and residual diagnostics.",
+        help="Toggle between high-level operational summaries and in-depth engineering formulas, physical constraints, and residuals.",
     )
-    technical_mode = "Technical" in view_mode
+    technical_mode = "Engineer" in view_mode
 
     st.sidebar.markdown("---")
 

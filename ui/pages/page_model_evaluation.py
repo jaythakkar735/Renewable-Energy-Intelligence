@@ -43,14 +43,27 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
 
     # 1. Forecasting Model Leaderboard
     st.markdown("### 1. Forecasting Model Leaderboard (Holdout Test Period: Jan 1 – Sep 30, 2020)")
-    st.dataframe(
-        df_lead[[
-            "model", "type", "mae_all", "rmse_all", "nmae_all_pct",
-            "mae_daylight", "skill_score", "train_time_sec", "inference_time_ms", "size_kb"
-        ]],
-        width="stretch",
-        hide_index=True,
-    )
+    if technical_mode:
+        st.dataframe(
+            df_lead[[
+                "model", "type", "mae_all", "rmse_all", "nmae_all_pct",
+                "mae_daylight", "skill_score", "train_time_sec", "inference_time_ms", "size_kb"
+            ]],
+            width="stretch",
+            hide_index=True,
+        )
+    else:
+        st.dataframe(
+            df_lead[["model", "type", "mae_all", "nmae_all_pct", "skill_score"]].rename(columns={
+                "model": "Model Name",
+                "type": "Architecture",
+                "mae_all": "Avg Error (MW)",
+                "nmae_all_pct": "Normalized Error (%)",
+                "skill_score": "Improvement vs Baseline",
+            }),
+            width="stretch",
+            hide_index=True,
+        )
 
     # 2. Bias Diagnosis (Capacity Growth vs Causal Normalization)
     st.markdown("---")

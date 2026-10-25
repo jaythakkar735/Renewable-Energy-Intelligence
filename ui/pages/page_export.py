@@ -147,6 +147,34 @@ def render_page_export(config: dict, technical_mode: bool):
         icon_name="download",
     )
 
+    if technical_mode:
+        st.markdown(
+            """
+            <div class="callout-box">
+                <div style="font-weight: 700; color: var(--accent-blue-text); margin-bottom: 6px;">
+                    ENGINEER PERSPECTIVE: Cryptographic Provenance & Sidecar Metadata
+                </div>
+                Every exported CSV dataset is accompanied by a companion JSON metadata sidecar containing the execution timestamp, 
+                gate closure cutoff, storage specifications, and schema definitions. In accordance with open distribution standards, 
+                raw 50k-row time series data is gitignored and generated locally via deterministic pipeline scripts.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            """
+            <div class="callout-box">
+                <div style="font-weight: 700; color: var(--accent-emerald-text); margin-bottom: 6px;">
+                    OPERATOR PERSPECTIVE: One-Click Briefing & Data Exports
+                </div>
+                Download the publication-ready HTML summary report below for presentation to plant leadership or stakeholders. 
+                All numbers are precomputed and reflect actual 2020 out-of-sample operational test results.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
     # 1. Executive Summary HTML Download
     st.markdown("### 1. One-Page Executive Summary Report (HTML)")
     st.markdown(

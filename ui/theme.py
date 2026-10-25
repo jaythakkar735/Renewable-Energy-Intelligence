@@ -74,23 +74,154 @@ def apply_custom_css():
     """Injects custom CSS stylesheets and sets dark/light mode class."""
     css_file = Path(__file__).resolve().parent.parent / "assets" / "css" / "styles.css"
     mode = st.session_state.get("theme_mode", "light")
-    theme_cls = "dark-mode" if mode == "dark" else "light-mode"
 
+    base_css = ""
     if css_file.exists():
         with open(css_file, "r", encoding="utf-8") as f:
-            css = f.read()
-        st.markdown(
-            f"""
-            <style>
-            {css}
-            </style>
-            <script>
-            document.body.className = "{theme_cls}";
-            document.documentElement.setAttribute('data-theme', '{mode}');
-            </script>
-            """,
-            unsafe_allow_html=True,
-        )
+            base_css = f.read()
+
+    if mode == "dark":
+        theme_override_css = """
+        /* Direct Dark Mode Overrides */
+        :root {
+            --bg-app: #0B1220 !important;
+            --bg-surface: #111B2E !important;
+            --bg-card: #111B2E !important;
+            --bg-sidebar: #070D18 !important;
+            --border-color: #1E293B !important;
+            --border-card: #1E293B !important;
+
+            --text-primary: #F8FAFC !important;
+            --text-muted: #94A3B8 !important;
+            --text-subtle: #64748B !important;
+            --text-sidebar: #F8FAFC !important;
+            --text-sidebar-muted: #94A3B8 !important;
+
+            --color-no-battery: #94A3B8 !important;
+            --color-rule-based: #3B82F6 !important;
+            --color-lp-naive: #8B5CF6 !important;
+            --color-lp-ml: #10B981 !important;
+            --color-perfect-foresight: #34D399 !important;
+
+            --accent-emerald-text: #34D399 !important;
+            --accent-cyan-text: #38BDF8 !important;
+            --accent-amber-text: #FBBF24 !important;
+            --accent-red-text: #F87171 !important;
+            --accent-blue-text: #60A5FA !important;
+            --accent-violet-text: #A78BFA !important;
+
+            --pill-emerald-bg: rgba(16, 185, 129, 0.2) !important;
+            --pill-cyan-bg: rgba(34, 211, 238, 0.2) !important;
+            --pill-amber-bg: rgba(245, 158, 11, 0.2) !important;
+            --pill-red-bg: rgba(239, 68, 68, 0.2) !important;
+            --pill-blue-bg: rgba(59, 130, 246, 0.2) !important;
+            --pill-violet-bg: rgba(139, 92, 246, 0.2) !important;
+
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4) !important;
+        }
+
+        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+            background-color: #0B1220 !important;
+            color: #F8FAFC !important;
+        }
+
+        .metric-card, .callout-box, .hero-container, div[data-testid="stExpander"] {
+            background-color: #111B2E !important;
+            border-color: #1E293B !important;
+            color: #F8FAFC !important;
+        }
+
+        .metric-card .metric-val, .hero-title, h1, h2, h3, h4, p, span, label {
+            color: #F8FAFC !important;
+        }
+
+        .metric-card .metric-sub, .hero-sub, .hero-summary {
+            color: #94A3B8 !important;
+        }
+
+        div[data-testid="stDataFrame"], table {
+            background-color: #111B2E !important;
+            color: #F8FAFC !important;
+        }
+
+        section[data-testid="stSidebar"] {
+            background-color: #070D18 !important;
+            border-right: 1px solid #1E293B !important;
+        }
+        """
+    else:
+        theme_override_css = """
+        /* Direct Light Mode Overrides */
+        :root {
+            --bg-app: #F4F7FB !important;
+            --bg-surface: #FFFFFF !important;
+            --bg-card: #FFFFFF !important;
+            --bg-sidebar: #0B1F3A !important;
+            --border-color: #E2E8F0 !important;
+            --border-card: #E2E8F0 !important;
+
+            --text-primary: #0F172A !important;
+            --text-muted: #475569 !important;
+            --text-subtle: #64748B !important;
+            --text-sidebar: #F8FAFC !important;
+            --text-sidebar-muted: #94A3B8 !important;
+
+            --color-no-battery: #64748B !important;
+            --color-rule-based: #2563EB !important;
+            --color-lp-naive: #7C3AED !important;
+            --color-lp-ml: #059669 !important;
+            --color-perfect-foresight: #10B981 !important;
+
+            --accent-emerald-text: #047857 !important;
+            --accent-cyan-text: #0E7490 !important;
+            --accent-amber-text: #92400E !important;
+            --accent-red-text: #B91C1C !important;
+            --accent-blue-text: #1D4ED8 !important;
+            --accent-violet-text: #6D28D9 !important;
+
+            --pill-emerald-bg: #ECFDF5 !important;
+            --pill-cyan-bg: #ECFEFF !important;
+            --pill-amber-bg: #FFFBEB !important;
+            --pill-red-bg: #FEF2F2 !important;
+            --pill-blue-bg: #EFF6FF !important;
+            --pill-violet-bg: #F5F3FF !important;
+
+            --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03) !important;
+        }
+
+        .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+            background-color: #F4F7FB !important;
+            color: #0F172A !important;
+        }
+
+        .metric-card, .callout-box, .hero-container, div[data-testid="stExpander"] {
+            background-color: #FFFFFF !important;
+            border-color: #E2E8F0 !important;
+            color: #0F172A !important;
+        }
+
+        .metric-card .metric-val, .hero-title, h1, h2, h3, h4 {
+            color: #0F172A !important;
+        }
+
+        .metric-card .metric-sub, .hero-sub {
+            color: #475569 !important;
+        }
+
+        section[data-testid="stSidebar"] {
+            background-color: #0B1F3A !important;
+        }
+        """
+
+    st.markdown(
+        f"""
+        <style>
+        {base_css}
+        {theme_override_css}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def get_plotly_layout(

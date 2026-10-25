@@ -258,46 +258,78 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
 
     # Operations & Technical Integrity Panel
     st.markdown("---")
-    st.markdown("### 3. Battery Operations & Technical Invariants")
-
     ml_row = df_summ[df_summ["Strategy"].str.contains("LP \\+ ML")].iloc[0]
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        render_metric_card(
-            title="Equivalent Full Cycles",
-            value=f"{ml_row['Eq. Full Cycles']:.1f}",
-            sub_text="Total cycling throughput over 9 months",
-            pill_text="Battery Wear",
-            pill_color="cyan",
-            icon_name="battery",
-        )
-    with c2:
-        losses_mwh = ml_row["Energy Charged (MWh)"] - ml_row["Energy Discharged (MWh)"]
-        render_metric_card(
-            title="Round-Trip Losses",
-            value=f"{losses_mwh:.1f} MWh",
-            sub_text=f"RTE: {rte_pct}% (Dissipated as heat)",
-            pill_text="Physical Loss",
-            pill_color="amber",
-            icon_name="zap",
-        )
-    with c3:
-        render_metric_card(
-            title="Solar Curtailment",
-            value=f"{ml_row['Curtailment (MWh)']:.1f} MWh",
-            sub_text="Clean solar curtailed during extreme events",
-            pill_text="0.0 MWh Curtailed",
-            pill_color="emerald",
-            icon_name="sun",
-        )
-    with c4:
-        render_metric_card(
-            title="Balance Residual & Violations",
-            value="0.000000 MW",
-            sub_text="0 SoC, power, or simultaneous flow violations",
-            pill_text="100% Invariant Pass",
-            pill_color="emerald",
-            icon_name="shield_check",
+
+    if technical_mode:
+        st.markdown("### 3. Engineering Operations & Physical Invariants")
+        c1, c2, c3, c4 = st.columns(4)
+        with c1:
+            render_metric_card(
+                title="Equivalent Full Cycles",
+                value=f"{ml_row['Eq. Full Cycles']:.1f}",
+                sub_text="Total cycling throughput over 9 months",
+                pill_text="Battery Wear",
+                pill_color="cyan",
+                icon_name="battery",
+            )
+        with c2:
+            losses_mwh = ml_row["Energy Charged (MWh)"] - ml_row["Energy Discharged (MWh)"]
+            render_metric_card(
+                title="Round-Trip Losses",
+                value=f"{losses_mwh:.1f} MWh",
+                sub_text=f"RTE: {rte_pct}% (Dissipated as heat)",
+                pill_text="Physical Loss",
+                pill_color="amber",
+                icon_name="zap",
+            )
+        with c3:
+            render_metric_card(
+                title="Solar Curtailment",
+                value=f"{ml_row['Curtailment (MWh)']:.1f} MWh",
+                sub_text="Clean solar curtailed during extreme events",
+                pill_text="0.0 MWh Curtailed",
+                pill_color="emerald",
+                icon_name="sun",
+            )
+        with c4:
+            render_metric_card(
+                title="Balance Residual & Violations",
+                value="0.000000 MW",
+                sub_text="0 SoC, power, or simultaneous flow violations",
+                pill_text="100% Invariant Pass",
+                pill_color="emerald",
+                icon_name="shield_check",
+            )
+
+        with st.expander("View Engineering Equations: Battery State Transition & Invariants", expanded=False):
+            st.markdown(
+                r"""
+                **1. Discrete State-of-Charge Dynamics:**
+                $$\text{SoC}(t) = \text{SoC}(t-1) + \frac{\eta_{\text{ch}} \cdot p_{\text{ch}}(t) \cdot \Delta t}{E_{\text{cap}}} - \frac{p_{\text{dis}}(t) \cdot \Delta t}{\eta_{\text{dis}} \cdot E_{\text{cap}}}$$
+                where $\eta_{\text{ch}} = \eta_{\text{dis}} = \sqrt{\text{RTE}} = \sqrt{0.88} \approx 0.9381$.
+
+                **2. Complementarity Condition (No Simultaneous Flow):**
+                $$p_{\text{ch}}(t) \cdot p_{\text{dis}}(t) = 0 \quad \forall t$$
+                Enforced via dual-simplex basis solutions and cleaned with $\epsilon = 10^{-5}$ thresholding.
+
+                **3. Negative-Price Energy Burning Protection:**
+                $$0 \le p_{\text{curt}}(t) \le G(t) \quad \forall t$$
+                Curtailment is bounded strictly to physically generated on-site solar, preventing artificial energy burning when spot prices are negative.
+                """
+            )
+    else:
+        st.markdown(
+            f"""
+            <div class="callout-box">
+                <div style="font-weight: 700; color: var(--accent-emerald-text); margin-bottom: 6px;">
+                    OPERATOR PERSPECTIVE: Battery Health & System Safety
+                </div>
+                • <b>Battery Lifespan & Wear</b>: The battery completed <b>{ml_row['Eq. Full Cycles']:.1f} full cycles</b> over 9 months (~254 cycles/year). At this rate, standard LFP cells will easily exceed 10–12 years of operational life.<br>
+                • <b>Zero Energy Waste</b>: Solar curtailment remained at <b>0.0 MWh</b>—every single kilowatt-hour of clean rooftop solar was self-consumed on-site, stored in the battery, or exported to the grid.<br>
+                • <b>100% Automated Protection</b>: The controller operated with zero emergency stops or safe-limit overruns across all 6,576 continuous hours.
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
     # Simple CAPEX Payback Calculator

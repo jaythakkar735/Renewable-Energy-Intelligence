@@ -228,15 +228,42 @@ def render_page_energy_explorer(config: dict, technical_mode: bool):
     fig.update_layout(**layout_dict)
     st.plotly_chart(fig, width="stretch")
 
-    # Telemetry Freezes Table
-    if telemetry_gaps:
-        st.markdown("### Telemetry Freeze Audit Log (Identified SCADA Flatlines)")
+    # Perspective-Specific Content
+    if technical_mode:
+        st.markdown("### Engineering Diagnostics: SCADA Telemetry Quality & Grid Physics")
         st.markdown(
-            "The following periods contain non-zero stuck telemetry readings where Energinet SCADA reported identical "
-            "values across multiple consecutive hours. These periods are flagged, excluded from ML loss training, "
-            "and preserved transparently without synthetic interpolation."
+            f"""
+            <div class="callout-box">
+                <div style="font-weight: 700; color: var(--accent-blue-text); margin-bottom: 6px;">
+                    ENGINEER PERSPECTIVE: Sensor Quality & Timezone Mechanics
+                </div>
+                • <b>Sensor Freeze Pathology</b>: Detected <b>{len(telemetry_gaps)} distinct SCADA freeze events</b> where Energinet telemetry broadcast identical non-zero values across consecutive hours (e.g. 26 consecutive hours stuck at 284.59 MW on June 2–3, 2020). Masking them prevents loss functions from learning unphysical zero-gradient dynamics.<br>
+                • <b>Timezone Invariance</b>: All data pipelines, features, and optimization constraints are maintained strictly in <b>UTC</b> to avoid Daylight Saving Time (DST) non-continuous 23-hour or 25-hour transition artifacts.<br>
+                • <b>Solar Penetration Ratio</b>: Peak solar capacity (726.7 MW) reaches <b>23.3% of regional peak demand (3,115 MW)</b>, driving intermittent negative wholesale spot prices during sunny weekend midday hours.
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
-        df_gaps = pd.DataFrame(telemetry_gaps)
-        st.dataframe(df_gaps, width="stretch", hide_index=True)
+
+        # Telemetry Freezes Table
+        if telemetry_gaps:
+            st.markdown("#### SCADA Telemetry Freeze Audit Log (Flagged & Masked Flatlines)")
+            df_gaps = pd.DataFrame(telemetry_gaps)
+            st.dataframe(df_gaps, width="stretch", hide_index=True)
+    else:
+        st.markdown(
+            """
+            <div class="callout-box">
+                <div style="font-weight: 700; color: var(--accent-emerald-text); margin-bottom: 6px;">
+                    OPERATOR PERSPECTIVE: Daily Operational Power Flow Patterns
+                </div>
+                • <b>Solar Generation Window</b>: Solar power generation begins around 05:00 UTC, peaks strongly between 11:00 and 14:00 UTC, and drops to zero by 20:00 UTC.<br>
+                • <b>Peak Price Window</b>: Wholesale electricity prices are lowest at night (01:00 – 04:00 UTC) and peak sharply during early evening (17:00 – 20:00 UTC) when regional electricity demand spikes.<br>
+                • <b>Battery Arbitrage Strategy</b>: The optimal operational plan is to charge the battery during midday solar surplus or cheap night hours, and discharge during the 17:00 – 20:00 evening peak to avoid expensive grid power.<br>
+                • <b>Sensor Quality Check</b>: Flagged red-shaded intervals represent known power company telemetry freezes that are safely ignored by the controller.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
     render_provenance_footer()

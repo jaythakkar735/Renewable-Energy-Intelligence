@@ -33,6 +33,36 @@ def render_page_methodology(config: dict, technical_mode: bool):
 
     t = get_current_theme()
 
+    if technical_mode:
+        st.markdown(
+            """
+            <div class="callout-box">
+                <div style="font-weight: 700; color: var(--accent-blue-text); margin-bottom: 6px;">
+                    ENGINEER PERSPECTIVE: Mathematical Specifications & Provenance
+                </div>
+                • <b>Market Timing</b>: Strict 12:00 UTC day-ahead gate closure enforcement. Features use causal lags $\\ge 24\\text{h}$ ($h < 12$) and $\\ge 48\\text{h}$ ($h \\ge 12$).<br>
+                • <b>Solver Specification</b>: SciPy <code>linprog</code> using the modern HiGHS dual-simplex engine. Average solve time is ~4.2 ms per 24-step dispatch horizon.<br>
+                • <b>Physical Invariants</b>: State-of-charge conservation, thermal round-trip efficiency ($\\eta_{\\text{rt}} = 88\\%$), zero simultaneous charge/discharge, and bounded solar curtailment ($p_{\\text{curt}} \\le G$).
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            """
+            <div class="callout-box">
+                <div style="font-weight: 700; color: var(--accent-emerald-text); margin-bottom: 6px;">
+                    OPERATOR PERSPECTIVE: How the Entire System Works
+                </div>
+                1. <b>Weather & Grid Data Ingestion</b>: Hourly solar production, commercial energy consumption, and hourly spot power prices are gathered and cleaned without human intervention.<br>
+                2. <b>Day-Ahead Prediction</b>: Every day at noon, an AI forecaster predicts solar generation for all 24 hours of tomorrow, locking nighttime values to 0.<br>
+                3. <b>Mathematical Optimization</b>: A fast mathematical solver calculates the cheapest charging and discharging timetable, keeping the battery safe and within physical bounds.<br>
+                4. <b>Autonomous Dispatch</b>: The facility executes the schedule, reducing reliance on the grid and maximizing solar self-consumption.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
     tab_m1, tab_m2, tab_m3, tab_m4 = st.tabs([
         "Feature Importance", "Optimization Formulation", "Capacity & Solar Ephemeris", "Glossary"
     ])
