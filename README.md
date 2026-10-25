@@ -5,7 +5,8 @@
 > Upgrade Pass Version (October 2026) — Verified End-to-End on Ubuntu Linux (CPU-First).
 
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
-[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Data License: CC BY 4.0](https://img.shields.io/badge/Data%20License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![Tests](https://img.shields.io/badge/tests-19%20passed-brightgreen.svg)]()
 [![Platform: Ubuntu Linux](https://img.shields.io/badge/platform-Ubuntu%20Linux%20(CPU--first)-orange.svg)]()
 [![Theme: Light Default + Dark Toggle](https://img.shields.io/badge/theme-Light%20(WCAG%20AA)-success.svg)]()
@@ -197,3 +198,12 @@ The dashboard features a **professional default Light Theme** (`#F4F7FB` app bac
 2. **Evaluation Window**: The test holdout covers **Jan 1 to Sep 30, 2020 (9 months / 6,576 hours)** as dictated by the OPSD package cutoff. Financial numbers are reported for this exact period and are not extrapolated or annualized.
 3. **Value of ML Solar Forecasts**: While machine learning models improve point forecast metrics (RMSE reduced from 88.5 MW to 74.4 MW), day-ahead spot market battery arbitrage is dominated by 24-hour Linear Programming co-optimization. Due to round-trip efficiency losses and real-time deficit settlements, regional day-ahead solar forecasts achieve comparable economic value to recent-day naive baselines (-€443 incremental value across 9 months).
 4. **No External NWP Weather Data**: As constrained by project instructions, no external weather forecasts or numerical weather prediction (NWP) datasets were downloaded. Features rely exclusively on astronomical solar geometry (Spencer 1971), market price signals, ENTSO-E load forecasts, and cutoff-safe telemetry lags.
+
+---
+
+## 9. License & Attribution
+
+- **Code License**: This project's code, architecture, and simulation engines are released under the [MIT License](LICENSE).
+- **Data Attribution**: The power system data used in this study is provided by the Open Power System Data (OPSD) platform:
+  > Open Power System Data. 2020. *Data Package Time series*. Version 2020-10-06. https://doi.org/10.25832/time_series/2020-10-06. Primary data from ENTSO-E Transparency. Licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- **No Data in Repository**: In accordance with distribution best practices and licensing policies, raw and processed parquet/time-series data are never stored in or pushed to this repository. All data directories are gitignored. The pipeline fetches and processes raw data locally upon execution.
