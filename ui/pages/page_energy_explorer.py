@@ -79,6 +79,9 @@ def render_page_energy_explorer(config: dict, technical_mode: bool):
     else:
         sub_df = clean_df.iloc[-336:].copy()
 
+    if sub_df.empty:
+        sub_df = clean_df.iloc[-336:].copy()
+
     # Apply timezone conversion if requested
     if "Copenhagen" in tz_option:
         plot_df = sub_df.copy()
@@ -223,7 +226,7 @@ def render_page_energy_explorer(config: dict, technical_mode: bool):
     )
 
     fig.update_layout(**layout_dict)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     # Telemetry Freezes Table
     if telemetry_gaps:
@@ -234,6 +237,6 @@ def render_page_energy_explorer(config: dict, technical_mode: bool):
             "and preserved transparently without synthetic interpolation."
         )
         df_gaps = pd.DataFrame(telemetry_gaps)
-        st.dataframe(df_gaps, use_container_width=True, hide_index=True)
+        st.dataframe(df_gaps, width="stretch", hide_index=True)
 
     render_provenance_footer()

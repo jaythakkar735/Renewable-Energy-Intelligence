@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import json
 import joblib
 from pathlib import Path
 import plotly.graph_objects as go
@@ -43,11 +44,21 @@ def render_page_methodology(config: dict, technical_mode: bool):
             "each feature column on the test set. Features with highest impact are the strictly cutoff-safe lags and astronomical geometry."
         )
 
+        reports_dir = Path(__file__).resolve().parent.parent.parent / "reports"
+        perm_file = reports_dir / "permutation_importance.json"
         models_dir = Path(__file__).resolve().parent.parent.parent / "models"
         lgb_file = models_dir / "lightgbm_model.joblib"
         clean_file = Path(__file__).resolve().parent.parent.parent / "data" / "processed" / "DK_1_clean.parquet"
 
-        if lgb_file.exists() and clean_file.exists():
+        imp_df = None
+        if perm_file.exists():
+            with open(perm_file, "r") as f:
+                perm_json = json.load(f)
+            imp_df = pd.DataFrame({
+                "Feature": perm_json["features"],
+                "Importance": perm_json["importance_mean"],
+            }).sort_values("Importance", ascending=True).tail(12)
+        elif lgb_file.exists() and clean_file.exists():
             from src.features import build_forecasting_features
             from src.forecasting import split_train_val_test
 
@@ -83,6 +94,7 @@ def render_page_methodology(config: dict, technical_mode: bool):
                 "Importance": perm.importances_mean,
             }).sort_values("Importance", ascending=True).tail(12)
 
+        if imp_df is not None:
             fig_imp = go.Figure()
             fig_imp.add_trace(
                 go.Bar(
@@ -100,7 +112,7 @@ def render_page_methodology(config: dict, technical_mode: bool):
                     height=420,
                 )
             )
-            st.plotly_chart(fig_imp, use_container_width=True)
+            st.plotly_chart(fig_imp, width="stretch")
 
     with tab_m2:
         st.markdown("### Linear Programming Optimization Formulation")
@@ -157,6 +169,6 @@ def render_page_methodology(config: dict, technical_mode: bool):
             ("Energy Burning", "An unphysical pathology where an optimizer imports negative-priced power and immediately curtails it; prevented by bounding curtailment to available solar."),
         ]
         df_g = pd.DataFrame(glossary, columns=["Term", "Definition"])
-        st.dataframe(df_g, use_container_width=True, hide_index=True)
+        st.dataframe(df_g, width="stretch", hide_index=True)
 
     render_provenance_footer()

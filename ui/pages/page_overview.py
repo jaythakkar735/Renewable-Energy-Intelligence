@@ -148,7 +148,7 @@ def render_page_overview(config: dict, technical_mode: bool):
             height=420,
         )
     )
-    st.plotly_chart(fig_wf, use_container_width=True)
+    st.plotly_chart(fig_wf, width="stretch")
 
     # Narrative Breakdown
     st.markdown("### Research Findings & Strategy Comparison")

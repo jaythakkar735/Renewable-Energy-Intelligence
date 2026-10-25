@@ -48,7 +48,7 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
             "model", "type", "mae_all", "rmse_all", "nmae_all_pct",
             "mae_daylight", "skill_score", "train_time_sec", "inference_time_ms", "size_kb"
         ]],
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -91,7 +91,7 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
             height=360,
         )
     )
-    st.plotly_chart(fig_bias, use_container_width=True)
+    st.plotly_chart(fig_bias, width="stretch")
 
     # 3. Weekly Block Bootstrap Confidence Intervals
     st.markdown("---")
@@ -133,7 +133,7 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
                 "Interpretation": "Robust positive economic return from battery deployment",
             },
         ]
-        st.dataframe(pd.DataFrame(boot_table), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(boot_table), width="stretch", hide_index=True)
 
         win_rates = boot.get("daily_win_rate_pct", {})
         best_day = boot.get("best_day", {})
@@ -162,7 +162,7 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
         with tab1:
             st.markdown("#### Forecast Quality vs Dispatch Cost Curve (Controlled Noise Injection)")
             df_qual = pd.DataFrame(sens["forecast_quality"])
-            st.dataframe(df_qual, use_container_width=True, hide_index=True)
+            st.dataframe(df_qual, width="stretch", hide_index=True)
 
             fig_q = go.Figure()
             clean_curve = df_qual[df_qual["noise_fraction"] >= 0]
@@ -195,12 +195,12 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
                     height=380,
                 )
             )
-            st.plotly_chart(fig_q, use_container_width=True)
+            st.plotly_chart(fig_q, width="stretch")
 
         with tab2:
             st.markdown("#### Sensitivity to Battery Energy Capacity (MWh)")
             df_cap = pd.DataFrame(sens["capacity"])
-            st.dataframe(df_cap, use_container_width=True, hide_index=True)
+            st.dataframe(df_cap, width="stretch", hide_index=True)
 
             fig_cap = go.Figure()
             fig_cap.add_trace(
@@ -219,12 +219,12 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
                     height=350,
                 )
             )
-            st.plotly_chart(fig_cap, use_container_width=True)
+            st.plotly_chart(fig_cap, width="stretch")
 
         with tab3:
             st.markdown("#### Sensitivity to Inverter Power Rating (MW)")
             df_pwr = pd.DataFrame(sens["power"])
-            st.dataframe(df_pwr, use_container_width=True, hide_index=True)
+            st.dataframe(df_pwr, width="stretch", hide_index=True)
 
             fig_pwr = go.Figure()
             fig_pwr.add_trace(
@@ -242,12 +242,12 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
                     height=350,
                 )
             )
-            st.plotly_chart(fig_pwr, use_container_width=True)
+            st.plotly_chart(fig_pwr, width="stretch")
 
         with tab4:
             st.markdown("#### Sensitivity to Round-Trip Efficiency (RTE %)")
             df_eff = pd.DataFrame(sens["efficiency"])
-            st.dataframe(df_eff, use_container_width=True, hide_index=True)
+            st.dataframe(df_eff, width="stretch", hide_index=True)
 
             fig_eff = go.Figure()
             fig_eff.add_trace(
@@ -267,12 +267,12 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
                     height=350,
                 )
             )
-            st.plotly_chart(fig_eff, use_container_width=True)
+            st.plotly_chart(fig_eff, width="stretch")
 
         with tab5:
             st.markdown("#### Sensitivity to Retail Tariff Adder (EUR/MWh)")
             df_add = pd.DataFrame(sens["adder"])
-            st.dataframe(df_add, use_container_width=True, hide_index=True)
+            st.dataframe(df_add, width="stretch", hide_index=True)
 
             fig_add = go.Figure()
             fig_add.add_trace(
@@ -290,12 +290,12 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
                     height=350,
                 )
             )
-            st.plotly_chart(fig_add, use_container_width=True)
+            st.plotly_chart(fig_add, width="stretch")
 
         with tab6:
             st.markdown("#### Sensitivity to Export Compensation Ratio (0.0 to 1.0)")
             df_exp = pd.DataFrame(sens.get("export_ratio", []))
-            st.dataframe(df_exp, use_container_width=True, hide_index=True)
+            st.dataframe(df_exp, width="stretch", hide_index=True)
 
             fig_exp = go.Figure()
             fig_exp.add_trace(
@@ -313,6 +313,6 @@ def render_page_model_evaluation(config: dict, technical_mode: bool):
                     height=350,
                 )
             )
-            st.plotly_chart(fig_exp, use_container_width=True)
+            st.plotly_chart(fig_exp, width="stretch")
 
     render_provenance_footer()

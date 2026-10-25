@@ -55,6 +55,21 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
 
     # Scenario Presets and Controls
     st.markdown("### 1. Battery Hardware Specs & Operational Parameters")
+
+    # Initialize session state keys if not already present
+    if "cap_slider" not in st.session_state:
+        st.session_state["cap_slider"] = float(config["battery"]["energy_capacity_mwh"])
+    if "pwr_slider" not in st.session_state:
+        st.session_state["pwr_slider"] = float(config["battery"]["max_charge_power_mw"])
+    if "rte_slider" not in st.session_state:
+        st.session_state["rte_slider"] = int(config["battery"]["round_trip_efficiency"] * 100)
+    if "adder_slider" not in st.session_state:
+        st.session_state["adder_slider"] = float(config["tariffs"]["retail_adder_eur_mwh"])
+    if "export_slider" not in st.session_state:
+        st.session_state["export_slider"] = float(config["tariffs"]["export_ratio"])
+    if "last_preset" not in st.session_state:
+        st.session_state["last_preset"] = "Default Baseline (10 MWh / 2.5 MW, 88% RTE)"
+
     preset_col, reset_col = st.columns([3, 1])
     with preset_col:
         preset_choice = st.selectbox(
@@ -72,24 +87,37 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
     with reset_col:
         st.write("")
         st.write("")
-        if st.button("Reset to Default Parameters", use_container_width=True):
+        if st.button("Reset to Default Parameters", width="stretch"):
             st.session_state["cap_slider"] = 10.0
             st.session_state["pwr_slider"] = 2.5
             st.session_state["rte_slider"] = 88
             st.session_state["adder_slider"] = 20.0
             st.session_state["export_slider"] = 1.0
+            st.session_state["last_preset"] = "Default Baseline (10 MWh / 2.5 MW, 88% RTE)"
+            st.rerun()
 
-    # Preset logic
-    if "Small Commercial" in preset_choice:
-        def_cap, def_pwr, def_rte = 5.0, 1.5, 88
-    elif "Large Scale" in preset_choice:
-        def_cap, def_pwr, def_rte = 20.0, 5.0, 88
-    elif "High Efficiency" in preset_choice:
-        def_cap, def_pwr, def_rte = 10.0, 2.5, 94
-    else:
-        def_cap = float(config["battery"]["energy_capacity_mwh"])
-        def_pwr = float(config["battery"]["max_charge_power_mw"])
-        def_rte = int(config["battery"]["round_trip_efficiency"] * 100)
+    # Preset logic: if preset changed by user, update session state and rerun
+    if preset_choice != st.session_state["last_preset"] and preset_choice != "Custom Configuration":
+        st.session_state["last_preset"] = preset_choice
+        if "Small Commercial" in preset_choice:
+            st.session_state["cap_slider"] = 5.0
+            st.session_state["pwr_slider"] = 1.5
+            st.session_state["rte_slider"] = 88
+        elif "Large Scale" in preset_choice:
+            st.session_state["cap_slider"] = 20.0
+            st.session_state["pwr_slider"] = 5.0
+            st.session_state["rte_slider"] = 88
+        elif "High Efficiency" in preset_choice:
+            st.session_state["cap_slider"] = 10.0
+            st.session_state["pwr_slider"] = 2.5
+            st.session_state["rte_slider"] = 94
+        elif "Default Baseline" in preset_choice:
+            st.session_state["cap_slider"] = 10.0
+            st.session_state["pwr_slider"] = 2.5
+            st.session_state["rte_slider"] = 88
+            st.session_state["adder_slider"] = 20.0
+            st.session_state["export_slider"] = 1.0
+        st.rerun()
 
     # Parameter Sliders
     col_p1, col_p2, col_p3 = st.columns(3)
@@ -98,7 +126,6 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
             "Energy Capacity (MWh)",
             min_value=2.0,
             max_value=30.0,
-            value=def_cap,
             step=1.0,
             key="cap_slider",
             help="Nominal nameplate energy storage capacity in MWh.",
@@ -107,7 +134,6 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
             "Max Charge/Discharge Power (MW)",
             min_value=0.5,
             max_value=10.0,
-            value=def_pwr,
             step=0.5,
             key="pwr_slider",
             help="Maximum continuous charge and discharge power in MW.",
@@ -118,7 +144,6 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
             "Round-Trip Efficiency (%)",
             min_value=65,
             max_value=98,
-            value=def_rte,
             step=1,
             key="rte_slider",
             help="AC-to-AC round-trip efficiency (losses split equally into charge/discharge).",
@@ -137,7 +162,6 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
             "Retail Grid Adder (EUR/MWh)",
             min_value=0.0,
             max_value=60.0,
-            value=float(config["tariffs"]["retail_adder_eur_mwh"]),
             step=5.0,
             key="adder_slider",
             help="Network tariffs, levies, and supplier retail markup on grid import.",
@@ -146,7 +170,6 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
             "Export Compensation Ratio",
             min_value=0.0,
             max_value=1.0,
-            value=float(config["tariffs"]["export_ratio"]),
             step=0.25,
             key="export_slider",
             help="Fraction of wholesale spot price earned when exporting solar/battery energy to grid.",
@@ -199,7 +222,7 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
             "Savings vs Rule-Based (EUR)", "Energy Charged (MWh)", "Energy Discharged (MWh)",
             "Grid Import (MWh)", "Grid Export (MWh)", "Curtailment (MWh)", "Eq. Full Cycles", "Violations"
         ]],
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -231,7 +254,7 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
             height=380,
         )
     )
-    st.plotly_chart(fig_comp, use_container_width=True)
+    st.plotly_chart(fig_comp, width="stretch")
 
     # Operations & Technical Integrity Panel
     st.markdown("---")

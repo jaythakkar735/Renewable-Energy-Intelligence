@@ -104,6 +104,9 @@ def render_page_forecasting_studio(config: dict, technical_mode: bool):
     else:
         sub_preds = preds_df.iloc[:240].copy()
 
+    if sub_preds.empty:
+        sub_preds = preds_df.iloc[:240].copy()
+
     # Metrics on the selected window vs Full Period
     y_true_win = sub_preds["actual"]
     y_pred_win = sub_preds[selected_col]
@@ -280,7 +283,7 @@ def render_page_forecasting_studio(config: dict, technical_mode: bool):
             height=430,
         )
     )
-    st.plotly_chart(fig_ts, use_container_width=True)
+    st.plotly_chart(fig_ts, width="stretch")
 
     # Two-Row Diurnal Error-by-Hour Chart (Alighted x-axis 0-23, No dual axes!)
     st.markdown("### Diurnal Error by Hour of Day (Full Test Holdout: 6,576 Hours)")
@@ -361,6 +364,6 @@ def render_page_forecasting_studio(config: dict, technical_mode: bool):
         )
     )
     fig_diurnal.update_xaxes(tickmode="linear", tick0=0, dtick=1)
-    st.plotly_chart(fig_diurnal, use_container_width=True)
+    st.plotly_chart(fig_diurnal, width="stretch")
 
     render_provenance_footer()
