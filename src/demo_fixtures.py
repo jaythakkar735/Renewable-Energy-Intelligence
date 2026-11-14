@@ -11,9 +11,9 @@ import numpy as np
 import pandas as pd
 
 from src.features import compute_solar_geometry
-from src.utils import get_logger
+from src.utils import setup_logger
 
-logger = get_logger(__name__)
+logger = setup_logger(__name__)
 
 
 def generate_demo_clean_dataframe(

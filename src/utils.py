@@ -23,6 +23,10 @@ def setup_logger(name: str = "renewable_ei", level: int = logging.INFO) -> loggi
     return logger
 
 
+# Alias for backward and cross-module compatibility
+get_logger = setup_logger
+
+
 def set_seed(seed: int = 42) -> None:
     """Sets random seeds for reproducibility across Python and NumPy."""
     random.seed(seed)
