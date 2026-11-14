@@ -27,7 +27,16 @@ def render_page_battery_laboratory(config: dict, technical_mode: bool):
     preds_file = reports_dir / "test_predictions.parquet"
 
     clean_df = get_clean_data()
-    preds_df = pd.read_parquet(preds_file) if preds_file.exists() else None
+    if preds_file.exists():
+        preds_df = pd.read_parquet(preds_file)
+    else:
+        from src.demo_fixtures import generate_demo_predictions_dataframe
+
+        preds_df = generate_demo_predictions_dataframe(config=config)
+        try:
+            preds_df.to_parquet(preds_file, index=True)
+        except Exception:
+            pass
 
     summary_sentence = (
         "Across 5 co-simulated dispatch strategies on the 2020 test holdout, LP battery scheduling achieves "

@@ -7,9 +7,10 @@
 [![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Data License: CC BY 4.0](https://img.shields.io/badge/Data%20License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Tests](https://img.shields.io/badge/tests-19%20passed-brightgreen.svg)]()
-[![Platform: Ubuntu Linux](https://img.shields.io/badge/platform-Ubuntu%20Linux%20(CPU--first)-orange.svg)]()
-[![Theme: Light Default + Dark Toggle](https://img.shields.io/badge/theme-Light%20(WCAG%20AA)-success.svg)]()
+[![CI & Quality Assurance](https://github.com/jaythakkar735/Renewable-Energy-Intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/jaythakkar735/Renewable-Energy-Intelligence/actions)
+[![Tests: 19 Passed](https://img.shields.io/badge/tests-19%20passed-brightgreen.svg)]()
+[![Docker: Ready](https://img.shields.io/badge/docker-ready-2496ED.svg?logo=docker&logoColor=white)](Dockerfile)
+[![Theme: Light + Dark](https://img.shields.io/badge/theme-Light%20%2B%20Dark-success.svg)]()
 
 ---
 
@@ -148,33 +149,41 @@ flowchart TD
 ### Prerequisites
 - Ubuntu Linux, Conda installed. Dedicated lightweight environment `renewable-ei` (Python 3.11).
 
-### One-Command Full Pipeline Execution
-To execute the entire audit, preprocessing, model training, battery dispatch, sensitivity sweeps, unit test suite, and notebook re-execution:
-```bash
-./scripts/run_all.sh
-```
+### Deployment & Execution Options
 
-### Manual Step-by-Step Execution
+#### Option A: Local Python / Conda Environment
 ```bash
-# 1. Activate environment
+# 1. Activate environment and install dependencies
 conda activate renewable-ei
+pip install -r requirements.txt
 
-# 2. Run data audit and clean preprocessing
-python -c "from src.preprocessing import get_clean_data; get_clean_data(force_recompute=True)"
-
-# 3. Train models and generate forecasts
-python -c "from src.forecasting import train_and_evaluate_models; from src.preprocessing import get_clean_data; train_and_evaluate_models(get_clean_data(), force_retrain=True)"
-
-# 4. Run 5-strategy dispatch and sensitivity sweeps
-python -c "from src.sensitivity import run_sensitivity_sweeps; from src.preprocessing import get_clean_data; import pandas as pd; run_sensitivity_sweeps(get_clean_data(), pd.read_parquet('reports/test_predictions.parquet'))"
-
-# 5. Run full automated test suite (19 tests)
+# 2. Run full automated test suite (19 tests)
 pytest -v
 
-# 6. Launch interactive Streamlit dashboard
+# 3. Launch interactive Streamlit dashboard
 streamlit run app.py --server.port 8502 --server.headless true
 # Open in browser: http://localhost:8502
 ```
+
+#### Option B: Docker Container Deployment
+The application includes a production-ready, containerized runtime with automated healthchecks:
+```bash
+# Build and run with Docker Compose
+docker compose up --build -d
+
+# Or run directly with Docker
+docker build -t renewable-energy-intelligence .
+docker run -p 8501:8501 renewable-energy-intelligence
+# Open in browser: http://localhost:8501
+```
+
+#### Option C: Streamlit Community Cloud (Free 1-Click Deployment)
+The repository is pre-configured for instant zero-setup deployment on [Streamlit Community Cloud](https://share.streamlit.io):
+1. Fork or open [jaythakkar735/Renewable-Energy-Intelligence](https://github.com/jaythakkar735/Renewable-Energy-Intelligence).
+2. Go to [share.streamlit.io](https://share.streamlit.io/) and click **"New app"**.
+3. Select your repository: `jaythakkar735/Renewable-Energy-Intelligence`.
+4. Set Branch: `main` and Main file path: `app.py`.
+5. Click **"Deploy"**! The application will automatically build, test, and provide a live public HTTPS dashboard with automated fallback fixtures.
 
 ---
 

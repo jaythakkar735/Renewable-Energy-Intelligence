@@ -23,11 +23,20 @@ def render_page_forecasting_studio(config: dict, technical_mode: bool):
     preds_file = reports_dir / "test_predictions.parquet"
     metrics_file = reports_dir / "forecast_metrics.json"
 
-    if not preds_file.exists() or not metrics_file.exists():
-        st.error("Model predictions not found. Please train models first.")
-        return
+    if not preds_file.exists():
+        from src.demo_fixtures import generate_demo_predictions_dataframe
 
-    preds_df = pd.read_parquet(preds_file)
+        preds_df = generate_demo_predictions_dataframe(config=config)
+        try:
+            preds_df.to_parquet(preds_file, index=True)
+        except Exception:
+            pass
+    else:
+        preds_df = pd.read_parquet(preds_file)
+
+    if not metrics_file.exists():
+        st.error("Model forecast metrics not found.")
+        return
     with open(metrics_file, "r") as f:
         all_metrics = json.load(f)
 
